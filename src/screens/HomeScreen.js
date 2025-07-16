@@ -7,7 +7,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import { colors, spacing } from '../theme';
-import api from '../services/api'; // supondo que manténs a camada de API
+import api from '../services/api';
+import {useUser} from "../contexts/UserContext"; // supondo que manténs a camada de API
 
 const StatCard = ({ title, value, iconName, iconColor }) => (
     <View style={styles.statCard}>
@@ -18,7 +19,7 @@ const StatCard = ({ title, value, iconName, iconColor }) => (
 );
 
 const QuickActionCard = ({ title, iconName, path, role }) => {
-    const { hasRole } = useAuth();
+    const { hasRole } = useUser();
     const navigation = useNavigation();
 
     if (role && !hasRole(role)) return null;

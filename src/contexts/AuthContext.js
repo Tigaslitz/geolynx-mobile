@@ -86,29 +86,6 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    const getUser = async ()=> {
-        try {
-            console.log("aqui " );
-            const response = await api.get('/user');
-            console.log("aqui " + response.data.role);
-            return response.data;
-        } catch (error) {
-            console.error('Getting user failed', error);
-            return null;
-        }
-    };
-
-    const hasRole = (requiredRole) => {
-        // Without user data from backend, we can't check roles
-        // This would need to be implemented differently
-        return true; // Allow all for now
-    };
-
-    const hasPermission = (permission) => {
-        // Without user data from backend, we can't check permissions
-        return true; // Allow all for now
-    };
-
     const value = {
         user,
         isAuthenticated,
@@ -116,9 +93,6 @@ export const AuthProvider = ({ children }) => {
         login,
         register,
         logout,
-        hasRole,
-        hasPermission,
-        getUser,
         mockUsers: [],
     };
 

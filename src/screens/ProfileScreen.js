@@ -6,14 +6,16 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
-    Alert,
+    Alert, ActivityIndicator,
 } from 'react-native';
-import { useAuth } from '../contexts/AuthContext';
+import { useUser } from '../contexts/UserContext';
 import { colors, spacing } from '../theme';
 
 export default function ProfileScreen({navigation}) {
-    const { getUser } = useAuth();
+    const { getUser,loading } = useUser();
     const [userData, setUserData] = useState(null);
+
+    if (loading) return <ActivityIndicator />;
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -28,7 +30,6 @@ export default function ProfileScreen({navigation}) {
     };
 
     if (!userData) return null; // ou <Loading />
-    console.log("aqui " + userData.username, userData.email);
     return (
         <View style={styles.container}>
             <Image
@@ -37,7 +38,7 @@ export default function ProfileScreen({navigation}) {
                     uri: 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
                 }}
             />
-            <Text style={styles.name}>{userData.username}</Text>
+            <Text style={styles.name}>{userData.fullName}</Text>
             <Text style={styles.email}>{userData.email}</Text>
 
             <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
