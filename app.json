@@ -24,6 +24,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "apiUrl": "https://glass-gasket-463218-j2.ew.r.appspot.com/api"
     }
   }
 }

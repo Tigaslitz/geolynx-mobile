@@ -1,0 +1,197 @@
+// File: src/screens/Home.js
+
+import React, { useEffect, useState } from 'react';
+import {ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,Image,} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useAuth } from '../contexts/AuthContext';
+import { colors, spacing } from '../theme';
+import api from '../services/api'; // supondo que manténs a camada de API
+
+const StatCard = ({ title, value, iconName, iconColor }) => (
+    <View style={styles.statCard}>
+        <MaterialIcons name={iconName} size={32} color={iconColor} />
+        <Text style={styles.statValue}>{value}</Text>
+        <Text style={styles.statTitle}>{title}</Text>
+    </View>
+);
+
+const QuickActionCard = ({ title, iconName, path, role }) => {
+    const { hasRole } = useAuth();
+    const navigation = useNavigation();
+
+    if (role && !hasRole(role)) return null;
+
+    return (
+        <TouchableOpacity
+            style={styles.actionCard}
+            onPress={() => navigation.navigate(path)}
+        >
+            <MaterialIcons name={iconName} size={28} color={colors.white} />
+            <Text style={styles.actionTitle}>{title}</Text>
+        </TouchableOpacity>
+    );
+};
+
+export default function Home({navigation}) {
+    const { user } = useAuth();
+    const [totalUsers, setTotalUsers] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        api.get('/users/count')
+            .then(res => setTotalUsers(res.data.count))
+            .catch(() => setTotalUsers('-'))
+            .finally(() => setLoading(false));
+    }, []);
+
+    return (
+        <SafeAreaView style={styles.safeArea}>
+            <View style={styles.header}>
+                <Text style={styles.welcome}>Bem‑vindo, {user.username}!</Text>
+                <TouchableOpacity
+                    style={styles.profileButton}
+                    onPress={() => navigation.navigate('Profile')}
+                >
+                    <Image
+                        source={
+                        require('../../assets/Logo_GeoLynx.png')
+                            /*user.avatarUrl
+                                ? { uri: user.avatarUrl }
+                                : require('../../assets/Logo_GeoLynx.png')*/
+                        }
+                        style={styles.profileImage}
+                    />
+                </TouchableOpacity>
+            </View>
+            <ScrollView contentContainerStyle={styles.container}>
+                <View style={styles.statsRow}>
+                    {loading
+                        ? <ActivityIndicator size="large" color={colors.primary} />
+                        : (
+                            <>
+                                <StatCard
+                                    title="Total de Utilizadores"
+                                    value={totalUsers}
+                                    iconName="people"
+                                    iconColor={colors.primary}
+                                />
+                                <StatCard
+                                    title="Folhas de Obra Ativas"
+                                    value="12"
+                                    iconName="assignment"
+                                    iconColor={colors.secondary}
+                                />
+                            </>
+                        )
+                    }
+                </View>
+
+                <Text style={styles.sectionTitle}>Ações Rápidas</Text>
+                <View style={styles.actionsRow}>
+                    <QuickActionCard
+                        title="Nova Ficha de Obra"
+                        iconName="add"
+                        path="WorksheetCreate"
+                    />
+                    <QuickActionCard
+                        title="Minhas Fichas"
+                        iconName="list-alt"
+                        path="WorksheetList"
+                    />
+                    <QuickActionCard
+                        title="Gerir Utilizadores"
+                        iconName="people"
+                        path="ListUsers"
+                        role="SYSADMIN"
+                    />
+                </View>
+            </ScrollView>
+        </SafeAreaView>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: {
+        padding: spacing.md,
+        backgroundColor: colors.background,
+    },
+    welcome: {
+        fontSize: 24,
+        fontWeight: '600',
+        marginBottom: spacing.lg,
+        color: colors.text,
+        paddingLeft:20
+    },
+    statsRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: spacing.lg,
+    },
+    statCard: {
+        flex: 1,
+        alignItems: 'center',
+        padding: spacing.md,
+        backgroundColor: colors.white,
+        borderRadius: 8,
+        marginHorizontal: spacing.xs,
+        elevation: 2,
+    },
+    statValue: {
+        fontSize: 22,
+        fontWeight: '700',
+        marginTop: spacing.sm,
+        color: colors.text,
+    },
+    statTitle: {
+        marginTop: spacing.xs,
+        color: colors.text,
+    },
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        marginBottom: spacing.sm,
+        color: colors.text,
+    },
+    actionsRow: {
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    actionCard: {
+        flex: 1,
+        alignItems: 'center',
+        padding: spacing.md,
+        backgroundColor: colors.primary,
+        borderRadius: 8,
+        marginHorizontal: spacing.xs,
+    },
+    actionTitle: {
+        marginTop: spacing.sm,
+        color: colors.white,
+        fontSize: 14,
+        textAlign: 'center',
+    },
+    safeArea: {
+        flex: 1,
+        backgroundColor: colors.background,
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: spacing.lg,
+    },
+    profileButton: {
+        marginRight: 5,
+        padding: spacing.xs,
+        borderRadius: 100,
+        backgroundColor: colors.text,
+    },
+    profileImage: {
+        width: 50,
+        height: 50,
+        borderRadius: 100,
+    },
+});
