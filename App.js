@@ -2,6 +2,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthProvider } from './src/contexts/AuthContext';
+import { ThemeProvider } from './src/contexts/ThemeContext';
 import {UserProvider} from "./src/contexts/UserContext";
 import { WorkSheetProvider } from './src/contexts/WorkSheetContext';
 import { NavigationContainer } from '@react-navigation/native';
@@ -31,41 +32,56 @@ const Stack = createNativeStackNavigator();
 export default function App() {
     return (
         <QueryClientProvider client={queryClient}>
-            <AuthProvider>
-                <UserProvider>
-                    <WorkSheetProvider>
-                        <NavigationContainer>
-                            <Stack.Navigator
-                                initialRouteName="Login"
-                                screenOptions={{ headerShown: false }}
-                            >
-                                {/* Rota pública */}
-                                <Stack.Screen name="Login" component={Login} />
-                                <Stack.Screen name="Register" component={Register} />
+            <ThemeProvider>
+                <AuthProvider>
+                    <UserProvider>
+                        <WorkSheetProvider>
+                            <NavigationContainer>
+                                <Stack.Navigator
+                                    initialRouteName="Login"
+                                    screenOptions={{ headerShown: false }}
+                                >
+                                    {/* Rota pública */}
+                                    <Stack.Screen name="Login" component={Login} />
+                                    <Stack.Screen name="Register" component={Register} />
 
-                                {/* Rotas privadas (uso de AuthContext para proteger) */}
-                                <Stack.Screen name="Home" component={Home} />
-                                <Stack.Screen name="ListUsers" component={ListUsers} />
-                                <Stack.Screen name="Profile" component={Profile} />
-                                <Stack.Screen name="AccountManagement" component={AccountManagement}/>
-                                <Stack.Screen name="AccountRemovalRequests" component={AccountRemovalRequests}/>
-                                <Stack.Screen name="ChangeAttributes" component={ChangeAttributes} />
-                                <Stack.Screen name="ChangePassword" component={ChangePassword} />
-                                <Stack.Screen name="ChangeRole" component={ChangeRole} />
-                                <Stack.Screen name="Map" component={MapScreen} />
-                                <Stack.Screen name="RequestAccountRemoval" component={RequestAccountRemoval}/>
-                                <Stack.Screen name="WorksheetCreate" component={WorksheetCreate} />
-                                <Stack.Screen name="WorksheetUpdate" component={WorksheetUpdate} />
-                                <Stack.Screen name="WorkSheetList" component={WorkSheetList} />
-                                <Stack.Screen name="WorkSheet" component={WorkSheet} />
+                                    {/* Rotas privadas (uso de AuthContext para proteger) */}
+                                    <Stack.Screen name="Home" component={Home} />
+                                    <Stack.Screen name="ListUsers" component={ListUsers} />
+                                    <Stack.Screen name="Profile" component={Profile} />
+                                    <Stack.Screen name="AccountManagement" component={AccountManagement}/>
+                                    <Stack.Screen name="AccountRemovalRequests" component={AccountRemovalRequests}/>
+                                    <Stack.Screen name="ChangeAttributes" component={ChangeAttributes} />
+                                    <Stack.Screen name="ChangePassword" component={ChangePassword} />
+                                    <Stack.Screen name="ChangeRole" component={ChangeRole} />
+                                    <Stack.Screen name="Map" component={MapScreen} />
+                                    <Stack.Screen name="RequestAccountRemoval" component={RequestAccountRemoval}/>
+                                    <Stack.Screen name="WorksheetCreate" component={WorksheetCreate} />
+                                    <Stack.Screen name="WorksheetUpdate" component={WorksheetUpdate} />
+                                    {/* Rotas privadas (uso de AuthContext para proteger) */}
+                                    <Stack.Screen name="Home" component={Home} />
+                                    <Stack.Screen name="ListUsers" component={ListUsers} />
+                                    <Stack.Screen name="Profile" component={Profile} />
+                                    <Stack.Screen name="AccountManagement" component={AccountManagement}/>
+                                    <Stack.Screen name="AccountRemovalRequests" component={AccountRemovalRequests}/>
+                                    <Stack.Screen name="ChangeAttributes" component={ChangeAttributes} />
+                                    <Stack.Screen name="ChangePassword" component={ChangePassword} />
+                                    <Stack.Screen name="ChangeRole" component={ChangeRole} />
+                                    <Stack.Screen name="Map" component={MapScreen} />
+                                    <Stack.Screen name="RequestAccountRemoval" component={RequestAccountRemoval}/>
+                                    <Stack.Screen name="WorksheetCreate" component={WorksheetCreate} />
+                                    <Stack.Screen name="WorksheetUpdate" component={WorksheetUpdate} />
+                                    <Stack.Screen name="WorkSheetList" component={WorkSheetList} />
+                                    <Stack.Screen name="WorkSheet" component={WorkSheet} />
 
-                                {/* Rota catch-all */}
-                                <Stack.Screen name="NotFound" component={NotFound} />
-                            </Stack.Navigator>
-                        </NavigationContainer>
-                    </WorkSheetProvider>
-                </UserProvider>
-            </AuthProvider>
+                                    {/* Rota catch-all */}
+                                    <Stack.Screen name="NotFound" component={NotFound} />
+                                </Stack.Navigator>
+                            </NavigationContainer>
+                        </WorkSheetProvider>
+                    </UserProvider>
+                </AuthProvider>
+            </ThemeProvider>
         </QueryClientProvider>
     );
 }

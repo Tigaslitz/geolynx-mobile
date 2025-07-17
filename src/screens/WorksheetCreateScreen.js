@@ -26,4 +26,15 @@ export default function WorksheetCreate({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({ container: { flex: 1, padding: spacing.md }, input: { borderWidth: 1, padding: spacing.sm, marginBottom: spacing.md } });
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: spacing.md
+    },
+
+    input: {
+        borderWidth: 1,
+        padding: spacing.sm,
+        marginBottom: spacing.md
+    }
+});

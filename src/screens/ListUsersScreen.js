@@ -42,8 +42,27 @@ export default function ListUsers({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: spacing.md, backgroundColor: colors.background },
-    item: { padding: spacing.sm, borderBottomWidth: 1, borderColor: colors.surface },
-    itemText: { fontSize: 16, color: colors.text },
-    error: { flex: 1, textAlign: 'center', marginTop: spacing.lg, color: colors.error }
+    container: {
+        flex: 1,
+        padding: spacing.md,
+        backgroundColor: colors.background
+    },
+
+    item: {
+        padding: spacing.sm,
+        borderBottomWidth: 1,
+        borderColor: colors.surface
+    },
+
+    itemText: {
+        fontSize: 16,
+        color: colors.text
+    },
+
+    error: {
+        flex: 1,
+        textAlign: 'center',
+        marginTop: spacing.lg,
+        color: colors.error
+    }
 });

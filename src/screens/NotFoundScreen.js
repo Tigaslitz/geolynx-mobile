@@ -15,7 +15,25 @@ export default function NotFound() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: spacing.md, backgroundColor: colors.background },
-    title: { fontSize: 24, fontWeight: '700', marginBottom: spacing.sm, color: colors.text },
-    message: { fontSize: 16, marginBottom: spacing.lg, color: colors.text, textAlign: 'center' }
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: spacing.md,
+        backgroundColor: colors.background
+    },
+
+    title: {
+        fontSize: 24,
+        fontWeight: '700',
+        marginBottom: spacing.sm,
+        color: colors.text
+    },
+
+    message: {
+        fontSize: 16,
+        marginBottom: spacing.lg,
+        color: colors.text,
+        textAlign: 'center'
+    }
 });

@@ -26,6 +26,14 @@ export default function ChangePassword({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: spacing.md },
-    input: { borderWidth: 1, padding: spacing.sm, marginBottom: spacing.md }
+    container: {
+        flex: 1,
+        padding: spacing.md
+    },
+
+    input: {
+        borderWidth: 1,
+        padding: spacing.sm,
+        marginBottom: spacing.md
+    }
 });

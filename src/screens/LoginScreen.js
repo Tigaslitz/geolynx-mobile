@@ -59,7 +59,49 @@ export default function Login({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({ container: { flex:1, justifyContent:'center', padding:spacing.md, backgroundColor:colors.background }, title: { fontSize:32,fontWeight:'700',marginBottom:spacing.lg,color:colors.primary,textAlign:'center' }, input: { backgroundColor:colors.surface,padding:spacing.sm,borderRadius:4,marginBottom:spacing.md,borderWidth:1,borderColor:colors.primary }, button: { backgroundColor:colors.primary,padding:spacing.md,borderRadius:4,alignItems:'center',marginBottom:spacing.sm }, buttonText: { color:colors.white,fontWeight:'600' }, link: { color:colors.primary,textAlign:'center',marginTop:spacing.sm },passwordContainer: {
+const styles = StyleSheet.create({
+    container: {
+        flex:1,
+        justifyContent:'center',
+        padding:spacing.md,
+        backgroundColor:colors.background
+    },
+    title: {
+        fontSize:32,
+        fontWeight:'700',
+        marginBottom:spacing.lg,
+        color:colors.primary,
+        textAlign:'center'
+    },
+
+    input: {
+        backgroundColor:colors.surface,
+        padding:spacing.sm,borderRadius:4,
+        marginBottom:spacing.md,
+        borderWidth:1,
+        borderColor:colors.primary
+    },
+
+    button: {
+        backgroundColor:colors.primary,
+        padding:spacing.md,
+        borderRadius:4,
+        alignItems:'center',
+        marginBottom:spacing.sm
+    },
+
+    buttonText: {
+        color:colors.white,
+        fontWeight:'600'
+    },
+
+    link: {
+        color:colors.primary,
+        textAlign:'center',
+        marginTop:spacing.sm
+    },
+
+    passwordContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: colors.surface,
@@ -72,4 +114,5 @@ const styles = StyleSheet.create({ container: { flex:1, justifyContent:'center',
     passwordInput: {
         flex: 1,
         paddingVertical: spacing.sm,
-    }, });
+    },
+});

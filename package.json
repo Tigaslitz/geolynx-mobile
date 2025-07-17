@@ -1,7 +1,19 @@
 {
   "name": "geolynx_mobile",
-  "license": "0BSD",
   "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "homepage": "https://github.com/Tigaslitz/geolynx-mobile#readme",
+  "bugs": {
+    "url": "https://github.com/Tigaslitz/geolynx-mobile/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tigaslitz/geolynx-mobile.git"
+  },
+  "license": "0BSD",
+  "author": "",
+  "type": "commonjs",
   "main": "index.js",
   "scripts": {
     "start": "expo start",
@@ -27,6 +39,5 @@
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
-  },
-  "private": true
+  }
 }
