@@ -7,19 +7,22 @@ import {
     StyleSheet,
     ScrollView,
     Alert,
+    Keyboard, Platform
 } from 'react-native';
 import { colors, spacing } from '../theme';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useUser } from '../contexts/UserContext';
 
 export default function AccountManagement() {
-    const { user, updateUser } = useUser();
+    const { user, setUser, updateUser } = useUser();
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     const [form, setForm] = useState({
         fullName: '',
-        phone: '',
+        phonePrimary: '',
         address: '',
         postalCode: '',
-        birthDate: '',
+        dateOfBirth: '',
         nationality: '',
         residence: '',
     });
@@ -28,10 +31,10 @@ export default function AccountManagement() {
         if (user) {
             setForm({
                 fullName: user.fullName || '',
-                phone: user.phone || '',
+                phonePrimary: user.phone || '',
                 address: user.address || '',
                 postalCode: user.postalCode || '',
-                birthDate: user.birthDate || '',
+                dateOfBirth: user.birthDate || '',
                 nationality: user.nationality || '',
                 residence: user.residence || '',
             });
@@ -43,13 +46,28 @@ export default function AccountManagement() {
     };
 
     const handleSave = async () => {
-        console.log("um" + user.id)
-        const result = await updateUser(user,form);
+        const payload = Object.entries(form)
+            .filter(([_, value]) => value && value.trim() !== '')
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+
+        const result = await updateUser(user,payload);
+        Keyboard.dismiss();
 
         if (result.success) {
             Alert.alert('Sucesso', 'Dados atualizados com sucesso!');
         } else {
             Alert.alert('Erro', result.error || 'Não foi possível atualizar os dados.');
+        }
+    };
+
+    const onDateChange = (event, selectedDate) => {
+        setShowDatePicker(Platform.OS === 'ios');
+        if (selectedDate) {
+            // formata para YYYY-MM-DD
+            const yyyy = selectedDate.getFullYear();
+            const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(selectedDate.getDate()).padStart(2, '0');
+            handleChange('dateOfBirth', `${yyyy}-${mm}-${dd}`);
         }
     };
 
@@ -61,17 +79,17 @@ export default function AccountManagement() {
             <View style={styles.infoBlock}>
                 <Text style={styles.label}>Email</Text>
                 <Text style={styles.staticText}>{user.email}</Text>
+
                 <Text style={styles.label}>Função</Text>
                 <Text style={styles.staticText}>{user.role}</Text>
             </View>
 
-            {/* Campos editáveis */}
+            {/* Campos editáveis genéricos (exceto Data de Nascimento) */}
             {[
                 { label: 'Nome completo', field: 'fullName' },
-                { label: 'Telemóvel', field: 'phone' },
+                { label: 'Telemóvel', field: 'phonePrimary' },
                 { label: 'Morada', field: 'address' },
                 { label: 'Código Postal', field: 'postalCode' },
-                { label: 'Data de Nascimento', field: 'birthDate' },
                 { label: 'Nacionalidade', field: 'nationality' },
                 { label: 'Residência', field: 'residence' },
             ].map(({ label, field }) => (
@@ -86,6 +104,35 @@ export default function AccountManagement() {
                 </View>
             ))}
 
+            {/* Campo de Data de Nascimento com DateTimePicker */}
+            <View style={styles.inputBlock}>
+                <Text style={styles.label}>Data de Nascimento</Text>
+                <TouchableOpacity
+                    style={styles.input}
+                    onPress={() => setShowDatePicker(true)}
+                >
+                    <Text
+                        style={{
+                            fontSize: 16,
+                            color: form.dateOfBirth ? colors.text : colors.border,
+                        }}
+                    >
+                        {form.dateOfBirth || 'Seleciona a data'}
+                    </Text>
+                </TouchableOpacity>
+            </View>
+
+            {showDatePicker && (
+                <DateTimePicker
+                    value={form.dateOfBirth ? new Date(form.dateOfBirth) : new Date()}
+                    mode="date"
+                    display="calendar"
+                    maximumDate={new Date()}
+                    onChange={onDateChange}
+                />
+            )}
+
+            {/* Botão de guardar */}
             <TouchableOpacity style={styles.button} onPress={handleSave}>
                 <Text style={styles.buttonText}>Guardar Alterações</Text>
             </TouchableOpacity>

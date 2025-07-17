@@ -12,24 +12,35 @@ import { useUser } from '../contexts/UserContext';
 import { colors, spacing } from '../theme';
 
 export default function ProfileScreen({navigation}) {
-    const { getUser,loading } = useUser();
-    const [userData, setUserData] = useState(null);
+    const { user, setUser, getUser,loading } = useUser();
 
-    if (loading) return <ActivityIndicator />;
+    if (loading) {
+        return (
+            <View style={styles.loadingContainer}>
+                <Image
+                    source={require('../../assets/Logo_GeoLynx.png')}
+                    style={styles.loadingImage}
+                />
+            </View>
+        );
+    }
 
     useEffect(() => {
         const fetchUser = async () => {
             const data = await getUser();
-            setUserData(data);
+            console.log("aqui ", {
+                data
+            })
+            setUser(data);
         };
         fetchUser();
     }, []);
 
     const handleEdit = () => {
-        navigation.navigate('AccountManagement', { user: userData });
+        navigation.navigate('AccountManagement');
     };
 
-    if (!userData) return null; // ou <Loading />
+    if (!user) return null; // ou <Loading />
     return (
         <View style={styles.container}>
             <Image
@@ -38,8 +49,8 @@ export default function ProfileScreen({navigation}) {
                     uri: 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
                 }}
             />
-            <Text style={styles.name}>{userData.fullName}</Text>
-            <Text style={styles.email}>{userData.email}</Text>
+            <Text style={styles.name}>{user.fullName}</Text>
+            <Text style={styles.email}>{user.email}</Text>
 
             <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
                 <Text style={styles.editText}>Editar Perfil</Text>
@@ -84,5 +95,16 @@ const styles = StyleSheet.create({
         color: colors.white,
         fontSize: 16,
         fontWeight: '500',
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: colors.background,
+    },
+    loadingImage: {
+        width: 120,
+        height: 120,
+        resizeMode: 'contain',
     },
 });

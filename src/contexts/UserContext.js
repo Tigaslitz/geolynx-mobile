@@ -42,18 +42,17 @@ export const UserProvider = ({ children }) => {
 
     const updateUser = async (user, updatedFields) => {
         try {
-            console.log("dois" + updatedFields.phone)
             const payload = {
-                identificador: user.id,
+                identificador: user.email,
                 atributos: updatedFields,
             };
-            console.log("tres" + payload.atributos.phone)
             const response = await api.post('/user/change-attributes', payload);
 
             // Atualizar localmente o estado com os dados modificados
             setUser((prev) => ({ ...prev, ...updatedFields }));
+            const refreshedUser = await getUser();
 
-            return { success: true, data: response.data };
+            return { success: true, data: refreshedUser };
         } catch (error) {
             console.error('Erro ao atualizar atributos do utilizador:', error);
             return {

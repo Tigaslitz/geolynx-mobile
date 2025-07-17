@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "geolynx_mobile",
+    "name": "Geo Lynx",
     "slug": "geolynx_mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Logo_GeoLynx.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/Logo_GeoLynx.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,13 +17,13 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Logo_GeoLynx.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/Logo_GeoLynx.png"
     },
     "extra": {
       "apiUrl": "https://glass-gasket-463218-j2.ew.r.appspot.com/api"
