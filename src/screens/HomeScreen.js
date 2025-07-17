@@ -8,7 +8,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
 import { colors, spacing } from '../theme';
 import api from '../services/api';
-import {useUser} from "../contexts/UserContext"; // supondo que manténs a camada de API
+import {useUser} from "../contexts/UserContext";
 
 const StatCard = ({ title, value, iconName, iconColor }) => (
     <View style={styles.statCard}>
@@ -99,7 +99,7 @@ export default function Home({navigation}) {
                     <QuickActionCard
                         title="Minhas Fichas"
                         iconName="list-alt"
-                        path="WorksheetList"
+                        path="WorkSheetList"
                     />
                     <QuickActionCard
                         title="Gerir Utilizadores"
