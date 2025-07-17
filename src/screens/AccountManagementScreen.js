@@ -9,12 +9,15 @@ import {
     Alert,
     Keyboard, Platform
 } from 'react-native';
-import { colors, spacing } from '../theme';
+import { spacing } from '../theme';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useUser } from '../contexts/UserContext';
+import { useTheme } from '../contexts/ThemeContext';
 
 export default function AccountManagement() {
     const { user, setUser, updateUser } = useUser();
+    const { theme } = useTheme();
+    const styles = getStyles(theme);
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     const [form, setForm] = useState({
@@ -114,7 +117,7 @@ export default function AccountManagement() {
                     <Text
                         style={{
                             fontSize: 16,
-                            color: form.dateOfBirth ? colors.text : colors.border,
+                            color: form.dateOfBirth ? theme.text : theme.border,
                         }}
                     >
                         {form.dateOfBirth || 'Seleciona a data'}
@@ -140,55 +143,57 @@ export default function AccountManagement() {
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        padding: spacing.lg,
-        backgroundColor: colors.background,
-    },
-    title: {
-        fontSize: 26,
-        fontWeight: '700',
-        color: colors.primary,
-        marginBottom: spacing.lg,
-        textAlign: 'center',
-    },
-    inputBlock: {
-        marginBottom: spacing.md,
-    },
-    infoBlock: {
-        marginBottom: spacing.lg,
-        backgroundColor: colors.surface,
-        padding: spacing.md,
-        borderRadius: 8,
-    },
-    label: {
-        fontWeight: '500',
-        color: colors.text,
-        marginBottom: 4,
-    },
-    input: {
-        backgroundColor: colors.white,
-        borderColor: colors.border || '#ccc',
-        borderWidth: 1,
-        borderRadius: 6,
-        padding: spacing.sm,
-        fontSize: 16,
-    },
-    staticText: {
-        fontSize: 16,
-        color: colors.text,
-        marginBottom: spacing.sm,
-    },
-    button: {
-        marginTop: spacing.lg,
-        backgroundColor: colors.primary,
-        padding: spacing.md,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    buttonText: {
-        color: colors.white,
-        fontSize: 16,
-        fontWeight: '600',
-    },
-});
+const getStyles = (theme) =>
+    StyleSheet.create({
+        container: {
+            padding: spacing.lg,
+            backgroundColor: theme.background,
+        },
+        title: {
+            fontSize: 26,
+            fontWeight: '700',
+            color: theme.primary,
+            marginBottom: spacing.lg,
+            textAlign: 'center',
+        },
+        inputBlock: {
+            marginBottom: spacing.md,
+        },
+        infoBlock: {
+            marginBottom: spacing.lg,
+            backgroundColor: theme.surface,
+            padding: spacing.md,
+            borderRadius: 8,
+        },
+        label: {
+            fontWeight: '500',
+            color: theme.text,
+            marginBottom: 4,
+        },
+        input: {
+            backgroundColor: theme.white,
+            borderColor: theme.border || '#ccc',
+            borderWidth: 1,
+            borderRadius: 6,
+            padding: spacing.sm,
+            fontSize: 16,
+            color: theme.text,
+        },
+        staticText: {
+            fontSize: 16,
+            color: theme.text,
+            marginBottom: spacing.sm,
+        },
+        button: {
+            marginTop: spacing.lg,
+            backgroundColor: theme.primary,
+            padding: spacing.md,
+            borderRadius: 8,
+            alignItems: 'center',
+        },
+        buttonText: {
+            color: theme.white,
+            fontSize: 16,
+            fontWeight: '600',
+        },
+    });

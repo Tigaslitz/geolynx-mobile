@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: spacing.md,
     },
+
     avatar: {
         width: 100,
         height: 100,
@@ -74,34 +75,40 @@ const styles = StyleSheet.create({
         marginBottom: spacing.lg,
         backgroundColor: colors.white,
     },
+
     name: {
         fontSize: 24,
         fontWeight: '600',
         color: colors.text,
         marginBottom: spacing.sm,
     },
+
     email: {
         fontSize: 16,
         color: colors.text,
         marginBottom: spacing.lg,
     },
+
     editButton: {
         paddingVertical: spacing.sm,
         paddingHorizontal: spacing.lg,
         backgroundColor: colors.primary,
         borderRadius: 8,
     },
+
     editText: {
         color: colors.white,
         fontSize: 16,
         fontWeight: '500',
     },
+
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: colors.background,
     },
+
     loadingImage: {
         width: 120,
         height: 120,

@@ -32,6 +32,17 @@ export default function AccountRemovalRequests() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: spacing.md, backgroundColor: colors.background },
-  item: { flexDirection: 'row', justifyContent: 'space-between', padding: spacing.sm, borderBottomWidth: 1, borderColor: colors.surface }
+  container: {
+    flex: 1,
+    padding: spacing.md,
+    backgroundColor: colors.background
+  },
+
+  item: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: spacing.sm,
+    borderBottomWidth: 1,
+    borderColor: colors.surface
+  }
 });
