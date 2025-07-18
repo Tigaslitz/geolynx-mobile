@@ -1,4 +1,4 @@
-const colors = {
+export const colors = {
     primary: '#25a960',
     secondary: '#03DAC6',
     error: '#B00020',
