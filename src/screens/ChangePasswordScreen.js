@@ -2,14 +2,19 @@ import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import api from '../services/api';
 import { spacing } from '../theme';
+import { colors, lightmode, darkmode} from '../theme/colors';
+import {getTheme} from "../services/GeneralFunctions";
 
-export default function ChangePassword({ route, navigation }) {
-    const { user } = route.params;
+export default async function ChangePassword({route, navigation}) {
+    console.log('ChangePassword');
+    const {user} = route.params;
+    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const styles = getStyles(theme);
     const [password, setPassword] = useState('');
 
     const handleSave = async () => {
         try {
-            await api.put(`/users/${user.id}/password`, { password });
+            await api.put(`/users/${user.id}/password`, {password});
             Alert.alert('Sucesso', 'Password alterada');
             navigation.goBack();
         } catch (err) {
@@ -19,13 +24,14 @@ export default function ChangePassword({ route, navigation }) {
 
     return (
         <View style={styles.container}>
-            <TextInput style={styles.input} placeholder="Nova password" secureTextEntry value={password} onChangeText={setPassword} />
-            <Button title="Gravar" onPress={handleSave} />
+            <TextInput style={styles.input} placeholder="Nova password" secureTextEntry value={password}
+                       onChangeText={setPassword}/>
+            <Button title="Gravar" onPress={handleSave}/>
         </View>
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         padding: spacing.md

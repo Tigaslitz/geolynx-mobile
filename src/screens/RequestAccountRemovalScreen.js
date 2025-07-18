@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { View, Button, Alert, StyleSheet } from 'react-native';
 import api from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
-import {spacing} from "../theme";
+import { spacing } from "../theme";
+import { colors, lightmode, darkmode} from '../theme/colors';
+import {getTheme} from "../services/GeneralFunctions";
 
-export default function RequestAccountRemoval({ navigation }) {
-    const { user } = useAuth();
+export default async function RequestAccountRemoval({navigation}) {
+    console.log('RequestAccountRemoval');
+    const {user} = useAuth();
+    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const styles = getStyles(theme);
     const [loading, setLoading] = useState(false);
 
     const handleRequest = async () => {
@@ -23,12 +28,13 @@ export default function RequestAccountRemoval({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Button title={loading ? 'A processar...' : 'Pedir remoção de conta'} onPress={handleRequest} disabled={loading} />
+            <Button title={loading ? 'A processar...' : 'Pedir remoção de conta'} onPress={handleRequest}
+                    disabled={loading}/>
         </View>
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',

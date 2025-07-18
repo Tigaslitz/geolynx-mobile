@@ -6,9 +6,11 @@ import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useAuth } from '../contexts/AuthContext';
-import { colors, spacing } from '../theme';
+import { spacing } from '../theme';
+import { colors, lightmode, darkmode} from '../theme/colors';
 import api from '../services/api';
-import {useUser} from "../contexts/UserContext"; // supondo que manténs a camada de API
+import {useUser} from "../contexts/UserContext";
+import {getTheme} from "../services/GeneralFunctions"; // supondo que manténs a camada de API
 
 const StatCard = ({ title, value, iconName, iconColor }) => (
     <View style={styles.statCard}>
@@ -29,14 +31,17 @@ const QuickActionCard = ({ title, iconName, path, role }) => {
             style={styles.actionCard}
             onPress={() => navigation.navigate(path)}
         >
-            <MaterialIcons name={iconName} size={28} color={colors.white} />
+            <MaterialIcons name={iconName} size={28} color={theme.white} />
             <Text style={styles.actionTitle}>{title}</Text>
         </TouchableOpacity>
     );
 };
 
-export default function Home({navigation}) {
-    const { user } = useAuth();
+export default async function Home({navigation}) {
+    console.log('Home');
+    const {user} = useAuth();
+    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const styles = getStyles(theme);
     const [totalUsers, setTotalUsers] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -57,7 +62,7 @@ export default function Home({navigation}) {
                 >
                     <Image
                         source={
-                        require('../../assets/Logo_GeoLynx.png')
+                            require('../../assets/Logo_GeoLynx.png')
                             /*user.avatarUrl
                                 ? { uri: user.avatarUrl }
                                 : require('../../assets/Logo_GeoLynx.png')*/
@@ -69,20 +74,20 @@ export default function Home({navigation}) {
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.statsRow}>
                     {loading
-                        ? <ActivityIndicator size="large" color={colors.primary} />
+                        ? <ActivityIndicator size="large" color={theme.primary}/>
                         : (
                             <>
                                 <StatCard
                                     title="Total de Utilizadores"
                                     value={totalUsers}
                                     iconName="people"
-                                    iconColor={colors.primary}
+                                    iconColor={theme.primary}
                                 />
                                 <StatCard
                                     title="Folhas de Obra Ativas"
                                     value="12"
                                     iconName="assignment"
-                                    iconColor={colors.secondary}
+                                    iconColor={theme.secondary}
                                 />
                             </>
                         )
@@ -113,16 +118,16 @@ export default function Home({navigation}) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme) => StyleSheet.create({
     container: {
         padding: spacing.md,
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
     },
     welcome: {
         fontSize: 24,
         fontWeight: '600',
         marginBottom: spacing.lg,
-        color: colors.text,
+        color: theme.text,
         paddingLeft:20
     },
     statsRow: {
@@ -134,7 +139,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         padding: spacing.md,
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
         borderRadius: 8,
         marginHorizontal: spacing.xs,
         elevation: 2,
@@ -143,17 +148,17 @@ const styles = StyleSheet.create({
         fontSize: 22,
         fontWeight: '700',
         marginTop: spacing.sm,
-        color: colors.text,
+        color: theme.text,
     },
     statTitle: {
         marginTop: spacing.xs,
-        color: colors.text,
+        color: theme.text,
     },
     sectionTitle: {
         fontSize: 18,
         fontWeight: '600',
         marginBottom: spacing.sm,
-        color: colors.text,
+        color: theme.text,
     },
     actionsRow: {
         flexWrap: 'wrap',
@@ -164,19 +169,19 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         padding: spacing.md,
-        backgroundColor: colors.primary,
+        backgroundColor: theme.primary,
         borderRadius: 8,
         marginHorizontal: spacing.xs,
     },
     actionTitle: {
         marginTop: spacing.sm,
-        color: colors.white,
+        color: theme.white,
         fontSize: 14,
         textAlign: 'center',
     },
     safeArea: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
     },
     header: {
         flexDirection: 'row',
@@ -188,7 +193,7 @@ const styles = StyleSheet.create({
         marginRight: 5,
         padding: spacing.xs,
         borderRadius: 100,
-        backgroundColor: colors.text,
+        backgroundColor: theme.text,
     },
     profileImage: {
         width: 50,

@@ -2,10 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import api from '../services/api';
-import { colors, spacing } from '../theme';
+import { spacing } from '../theme';
+import { colors, lightmode, darkmode} from '../theme/colors';
+import {getTheme} from "../services/GeneralFunctions";
 
-export default function ListUsers({ navigation }) {
+export default async function ListUsers({navigation}) {
+    console.log('ListUsers');
     const { hasRole } = useAuth();
+    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const styles = getStyles(theme);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -22,15 +27,15 @@ export default function ListUsers({ navigation }) {
     return (
         <View style={styles.container}>
             {loading ? (
-                <ActivityIndicator size="large" color={colors.primary} />
+                <ActivityIndicator size="large" color={theme.primary}/>
             ) : (
                 <FlatList
                     data={users}
                     keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
+                    renderItem={({item}) => (
                         <TouchableOpacity
                             style={styles.item}
-                            onPress={() => navigation.navigate('AccountManagement', { user: item })}
+                            onPress={() => navigation.navigate('AccountManagement', {user: item})}
                         >
                             <Text style={styles.itemText}>{item.name}</Text>
                         </TouchableOpacity>
@@ -41,28 +46,28 @@ export default function ListUsers({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         padding: spacing.md,
-        backgroundColor: colors.background
+        backgroundColor: theme.background
     },
 
     item: {
         padding: spacing.sm,
         borderBottomWidth: 1,
-        borderColor: colors.surface
+        borderColor: theme.surface
     },
 
     itemText: {
         fontSize: 16,
-        color: colors.text
+        color: theme.text
     },
 
     error: {
         flex: 1,
         textAlign: 'center',
         marginTop: spacing.lg,
-        color: colors.error
+        color: theme.error
     }
 });
