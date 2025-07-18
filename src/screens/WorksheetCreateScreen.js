@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import api from '../services/api';
 import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
 import {getTheme} from "../services/GeneralFunctions";
 
-export default async function WorksheetCreate({navigation}) {
-    console.log('WorksheetCreate');
-    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+export default function WorksheetCreate({navigation}) {
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     const handleCreate = async () => {
         try {

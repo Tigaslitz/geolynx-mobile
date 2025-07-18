@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { spacing } from '../theme';
@@ -6,17 +6,22 @@ import { colors, lightmode, darkmode} from '../theme/colors';
 import { MaterialIcons } from "@expo/vector-icons";
 import {startupTheme} from "../services/GeneralFunctions";
 
-export default async function Login({navigation}) {
-    //console.log('Login');
-    const {login} = useAuth();
+export default function Login({navigation}) {
+    const { login } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    //const theme = (await startupTheme()) === 'dark' ? darkmode : lightmode;
-    await startupTheme();
-    const theme = lightmode;
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await startupTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     const handleLogin = async () => {
         if (!email || !password) return Alert.alert('Inválido', 'Preencha todos os campos');
@@ -38,12 +43,13 @@ export default async function Login({navigation}) {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Login</Text>
-            <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" autoCapitalize="none"
+            <TextInput style={styles.input} placeholder="Email" placeholderTextColor={theme.text} keyboardType="email-address" autoCapitalize="none"
                        value={email} onChangeText={setEmail}/>
             <View style={styles.passwordContainer}>
                 <TextInput
                     style={styles.passwordInput}
                     placeholder="Password"
+                    placeholderTextColor={theme.text}
                     secureTextEntry={!showPassword}
                     value={password}
                     onChangeText={setPassword}
@@ -85,6 +91,7 @@ const getStyles = (theme) =>
     },
 
     input: {
+        color:theme.text,
         backgroundColor:theme.surface,
         padding:spacing.sm,borderRadius:4,
         marginBottom:spacing.md,
@@ -122,6 +129,7 @@ const getStyles = (theme) =>
         paddingHorizontal: spacing.sm,
     },
     passwordInput: {
+        color:theme.text,
         flex: 1,
         paddingVertical: spacing.sm,
     },

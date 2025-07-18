@@ -13,11 +13,18 @@ import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
 import {getTheme} from "../services/GeneralFunctions";
 
-export default async function ProfileScreen({navigation}) {
-    console.log('ProfileScreen');
+export default function ProfileScreen({navigation}) {
     const {user, setUser, getUser, loading} = useUser();
-    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     if (loading) {
         return (

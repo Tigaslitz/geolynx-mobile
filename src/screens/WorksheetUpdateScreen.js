@@ -6,14 +6,21 @@ import { colors, lightmode, darkmode} from '../theme/colors';
 import {getTheme} from "../services/GeneralFunctions";
 
 
-export default async function WorksheetUpdate({route, navigation}) {
-    console.log('WorksheetUpdate');
-    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+export default function WorksheetUpdate({route, navigation}) {
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const {worksheetId} = route.params;
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     useEffect(() => {
         api.get(`/worksheets/${worksheetId}`)

@@ -6,13 +6,20 @@ import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
 import {getTheme} from "../services/GeneralFunctions";
 
-export default async function ListUsers({navigation}) {
-    console.log('ListUsers');
+export default function ListUsers({navigation}) {
     const { hasRole } = useAuth();
-    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     useEffect(() => {
         api.get('/users')

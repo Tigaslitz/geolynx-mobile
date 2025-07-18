@@ -12,38 +12,21 @@ import api from '../services/api';
 import {useUser} from "../contexts/UserContext";
 import {getTheme} from "../services/GeneralFunctions"; // supondo que manténs a camada de API
 
-const StatCard = ({ title, value, iconName, iconColor }) => (
-    <View style={styles.statCard}>
-        <MaterialIcons name={iconName} size={32} color={iconColor} />
-        <Text style={styles.statValue}>{value}</Text>
-        <Text style={styles.statTitle}>{title}</Text>
-    </View>
-);
-
-const QuickActionCard = ({ title, iconName, path, role }) => {
-    const { hasRole } = useUser();
-    const navigation = useNavigation();
-
-    if (role && !hasRole(role)) return null;
-
-    return (
-        <TouchableOpacity
-            style={styles.actionCard}
-            onPress={() => navigation.navigate(path)}
-        >
-            <MaterialIcons name={iconName} size={28} color={theme.white} />
-            <Text style={styles.actionTitle}>{title}</Text>
-        </TouchableOpacity>
-    );
-};
-
-export default async function Home({navigation}) {
-    console.log('Home');
+export default function Home({navigation}) {
     const {user} = useAuth();
-    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
+    console.log("styles ", styles);
     const [totalUsers, setTotalUsers] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     useEffect(() => {
         api.get('/users/count')
@@ -51,6 +34,31 @@ export default async function Home({navigation}) {
             .catch(() => setTotalUsers('-'))
             .finally(() => setLoading(false));
     }, []);
+
+    const StatCard = ({ title, value, iconName, iconColor }) => (
+        <View style={styles.statCard}>
+            <MaterialIcons name={iconName} size={32} color={iconColor} />
+            <Text style={styles.statValue}>{value}</Text>
+            <Text style={styles.statTitle}>{title}</Text>
+        </View>
+    );
+
+    const QuickActionCard = ({ title, iconName, path, role }) => {
+        const { hasRole } = useUser();
+        const navigation = useNavigation();
+
+        if (role && !hasRole(role)) return null;
+
+        return (
+            <TouchableOpacity
+                style={styles.actionCard}
+                onPress={() => navigation.navigate(path)}
+            >
+                <MaterialIcons name={iconName} size={28} color={theme.white} />
+                <Text style={styles.actionTitle}>{title}</Text>
+            </TouchableOpacity>
+        );
+    };
 
     return (
         <SafeAreaView style={styles.safeArea}>

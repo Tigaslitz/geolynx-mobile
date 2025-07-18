@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     View,
     Text,
@@ -11,11 +11,11 @@ import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
 import { useAuth } from '../contexts/AuthContext';
 import {MaterialIcons} from "@expo/vector-icons";
+import {getTheme, startupTheme} from "../services/GeneralFunctions";
 
-export default async function Register({navigation}) {
-    console.log('Register');
+export default function Register({navigation}) {
     const {register} = useAuth();
-    const theme = (await startupTheme()) === 'dark' ? darkmode : lightmode;
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
@@ -27,6 +27,15 @@ export default async function Register({navigation}) {
         confirmPassword: '',
     });
     const [showPassword, setShowPassword] = useState(false);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await startupTheme();
+            console.log("aqui", themeMode);
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     const handleChange = (field, value) => {
         setFormData((prev) => ({...prev, [field]: value}));
@@ -70,18 +79,21 @@ export default async function Register({navigation}) {
             <TextInput
                 style={styles.input}
                 placeholder="Username"
+                placeholderTextColor={theme.text}
                 value={formData.username}
                 onChangeText={(text) => handleChange('username', text)}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Nome completo"
+                placeholderTextColor={theme.text}
                 value={formData.fullName}
                 onChangeText={(text) => handleChange('fullName', text)}
             />
             <TextInput
                 style={styles.input}
                 placeholder="Email"
+                placeholderTextColor={theme.text}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 value={formData.email}
@@ -90,6 +102,7 @@ export default async function Register({navigation}) {
             <TextInput
                 style={styles.input}
                 placeholder="Telemóvel"
+                placeholderTextColor={theme.text}
                 keyboardType="phone-pad"
                 value={formData.phone}
                 onChangeText={(text) => handleChange('phone', text)}
@@ -98,6 +111,7 @@ export default async function Register({navigation}) {
                 <TextInput
                     style={styles.passwordInput}
                     placeholder="Password"
+                    placeholderTextColor={theme.text}
                     secureTextEntry={!showPassword}
                     value={formData.password}
                     onChangeText={setFormData}
@@ -115,6 +129,7 @@ export default async function Register({navigation}) {
             <TextInput
                 style={styles.input}
                 placeholder="Confirmar Password"
+                placeholderTextColor={theme.text}
                 secureTextEntry
                 value={formData.confirmPassword}
                 onChangeText={(text) => handleChange('confirmPassword', text)}

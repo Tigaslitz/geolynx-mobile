@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
 import api from '../services/api';
 import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
 import {getTheme} from "../services/GeneralFunctions";
 
-export default async function ChangeAttributes({route, navigation}) {
-    console.log('ChangeAttributes');
+export default function ChangeAttributes({route, navigation}) {
     const {user} = route.params;
-    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const [name, setName] = useState(user.name);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     const handleSave = async () => {
         try {

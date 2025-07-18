@@ -6,13 +6,20 @@ import { colors, lightmode, darkmode} from '../theme/colors';
 import {getTheme} from "../services/GeneralFunctions";
 import {useUser} from "../contexts/UserContext";
 
-export default async function AccountRemovalRequests() {
-  console.log('AccountRemovalRequests');
+export default function AccountRemovalRequests() {
   const {user} = useUser();
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
-  const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
-  const styles = getStyles(theme);
+    const [theme, setTheme] = useState(lightmode);
+    const styles = getStyles(theme);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
   useEffect(() => {
     api.get('/removal-requests')

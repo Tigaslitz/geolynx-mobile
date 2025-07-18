@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { spacing } from '../theme';
@@ -6,11 +6,19 @@ import { colors, lightmode, darkmode} from '../theme/colors';
 import {useUser} from "../contexts/UserContext";
 import {getTheme} from "../services/GeneralFunctions";
 
-export default async function NotFound() {
-    console.log('NotFound');
-    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+export default function NotFound() {
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const navigation = useNavigation();
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Página não encontrada</Text>

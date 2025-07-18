@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, StyleSheet } from 'react-native';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { lightmode, darkmode} from '../theme/colors';
@@ -6,11 +6,18 @@ import {useUser} from "../contexts/UserContext";
 import {getTheme} from "../services/GeneralFunctions";
 
 
-export default async function MapScreen({route}) {
-    console.log('MapScreen');
-    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+export default function MapScreen({route}) {
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const {latitude, longitude} = route.params;
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     return (
         <View style={styles.container}>

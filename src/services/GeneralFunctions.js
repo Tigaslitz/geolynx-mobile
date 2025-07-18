@@ -1,15 +1,17 @@
 import * as SecureStore from "expo-secure-store";
-import {useColorScheme} from "react-native";
+import { Appearance } from "react-native";
+import {darkmode} from "../theme/colors";
 
 export async function startupTheme() {
-    let theme = useColorScheme();
-    await SecureStore.setItemAsync('mobile_geolynx_theme', theme);
-    return theme;
+    let theme = Appearance.getColorScheme();
+    await SecureStore.setItemAsync('mobile_geolynx_theme', 'dark');
+    return 'dark';
 }
 
 export async function getTheme(){
     let theme = "light";
     try {
+        console.log("aqui ", await SecureStore.getItemAsync('mobile_geolynx_theme'))
         theme = await SecureStore.getItemAsync('mobile_geolynx_theme');
     } catch(Exception){
         console.log("Color scheme loading error, auto-setting to light mode.")

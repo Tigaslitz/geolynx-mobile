@@ -13,12 +13,11 @@ import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useUser } from '../contexts/UserContext';
-import {getTheme} from "../services/GeneralFunctions";
+import {getTheme, startupTheme} from "../services/GeneralFunctions";
 
-export default async function AccountManagement() {
-    console.log('AccountManagement');
+export default function AccountManagement() {
     const {user, setUser, updateUser} = useUser();
-    const theme = getTheme() === 'dark' ? darkmode : lightmode;
+    const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -31,6 +30,14 @@ export default async function AccountManagement() {
         nationality: '',
         residence: '',
     });
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
+        loadTheme();
+    }, []);
 
     useEffect(() => {
         if (user) {
@@ -105,6 +112,7 @@ export default async function AccountManagement() {
                         value={form[field]}
                         onChangeText={(value) => handleChange(field, value)}
                         placeholder={`Introduz ${label.toLowerCase()}`}
+                        placeholderTextColor={theme.text}
                     />
                 </View>
             ))}
@@ -119,7 +127,7 @@ export default async function AccountManagement() {
                     <Text
                         style={{
                             fontSize: 16,
-                            color: form.dateOfBirth ? theme.text : theme.border,
+                            color: form.dateOfBirth ? colors.text : colors.surface,
                         }}
                     >
                         {form.dateOfBirth || 'Seleciona a data'}
@@ -173,7 +181,7 @@ const getStyles = (theme) =>
             marginBottom: 4,
         },
         input: {
-            backgroundColor: theme.white,
+            backgroundColor: theme.background,
             borderColor: theme.border || '#ccc',
             borderWidth: 1,
             borderRadius: 6,
