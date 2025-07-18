@@ -9,10 +9,15 @@ import {
     Alert, ActivityIndicator,
 } from 'react-native';
 import { useUser } from '../contexts/UserContext';
-import { colors, spacing } from '../theme';
+import { spacing } from '../theme';
+import { colors, lightmode, darkmode} from '../theme/colors';
+import {getTheme} from "../services/GeneralFunctions";
 
-export default function ProfileScreen({navigation}) {
-    const { user, setUser, getUser,loading } = useUser();
+export default async function ProfileScreen({navigation}) {
+    console.log('ProfileScreen');
+    const {user, setUser, getUser, loading} = useUser();
+    const theme = (await getTheme()) === 'dark' ? darkmode : lightmode;
+    const styles = getStyles(theme);
 
     if (loading) {
         return (
@@ -59,10 +64,10 @@ export default function ProfileScreen({navigation}) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
         alignItems: 'center',
         justifyContent: 'center',
         padding: spacing.md,
@@ -73,31 +78,31 @@ const styles = StyleSheet.create({
         height: 100,
         borderRadius: 50,
         marginBottom: spacing.lg,
-        backgroundColor: colors.white,
+        backgroundColor: theme.white,
     },
 
     name: {
         fontSize: 24,
         fontWeight: '600',
-        color: colors.text,
+        color: theme.text,
         marginBottom: spacing.sm,
     },
 
     email: {
         fontSize: 16,
-        color: colors.text,
+        color: theme.text,
         marginBottom: spacing.lg,
     },
 
     editButton: {
         paddingVertical: spacing.sm,
         paddingHorizontal: spacing.lg,
-        backgroundColor: colors.primary,
+        backgroundColor: theme.primary,
         borderRadius: 8,
     },
 
     editText: {
-        color: colors.white,
+        color: theme.white,
         fontSize: 16,
         fontWeight: '500',
     },
@@ -106,7 +111,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
     },
 
     loadingImage: {

@@ -10,13 +10,15 @@ import {
     Keyboard, Platform
 } from 'react-native';
 import { spacing } from '../theme';
+import { colors, lightmode, darkmode} from '../theme/colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useUser } from '../contexts/UserContext';
-import { useTheme } from '../contexts/ThemeContext';
+import {getTheme} from "../services/GeneralFunctions";
 
-export default function AccountManagement() {
-    const { user, setUser, updateUser } = useUser();
-    const { theme } = useTheme();
+export default async function AccountManagement() {
+    console.log('AccountManagement');
+    const {user, setUser, updateUser} = useUser();
+    const theme = getTheme() === 'dark' ? darkmode : lightmode;
     const styles = getStyles(theme);
     const [showDatePicker, setShowDatePicker] = useState(false);
 
@@ -45,15 +47,15 @@ export default function AccountManagement() {
     }, [user]);
 
     const handleChange = (field, value) => {
-        setForm((prev) => ({ ...prev, [field]: value }));
+        setForm((prev) => ({...prev, [field]: value}));
     };
 
     const handleSave = async () => {
         const payload = Object.entries(form)
             .filter(([_, value]) => value && value.trim() !== '')
-            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
+            .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
 
-        const result = await updateUser(user,payload);
+        const result = await updateUser(user, payload);
         Keyboard.dismiss();
 
         if (result.success) {
@@ -89,13 +91,13 @@ export default function AccountManagement() {
 
             {/* Campos editáveis genéricos (exceto Data de Nascimento) */}
             {[
-                { label: 'Nome completo', field: 'fullName' },
-                { label: 'Telemóvel', field: 'phonePrimary' },
-                { label: 'Morada', field: 'address' },
-                { label: 'Código Postal', field: 'postalCode' },
-                { label: 'Nacionalidade', field: 'nationality' },
-                { label: 'Residência', field: 'residence' },
-            ].map(({ label, field }) => (
+                {label: 'Nome completo', field: 'fullName'},
+                {label: 'Telemóvel', field: 'phonePrimary'},
+                {label: 'Morada', field: 'address'},
+                {label: 'Código Postal', field: 'postalCode'},
+                {label: 'Nacionalidade', field: 'nationality'},
+                {label: 'Residência', field: 'residence'},
+            ].map(({label, field}) => (
                 <View key={field} style={styles.inputBlock}>
                     <Text style={styles.label}>{label}</Text>
                     <TextInput

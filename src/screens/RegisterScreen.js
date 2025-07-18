@@ -7,12 +7,16 @@ import {
     StyleSheet,
     Alert,
 } from 'react-native';
-import { colors, spacing } from '../theme';
+import { spacing } from '../theme';
+import { colors, lightmode, darkmode} from '../theme/colors';
 import { useAuth } from '../contexts/AuthContext';
 import {MaterialIcons} from "@expo/vector-icons";
 
-export default function Register({ navigation }) {
-    const { register } = useAuth();
+export default async function Register({navigation}) {
+    console.log('Register');
+    const {register} = useAuth();
+    const theme = (await startupTheme()) === 'dark' ? darkmode : lightmode;
+    const styles = getStyles(theme);
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
@@ -25,7 +29,7 @@ export default function Register({ navigation }) {
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (field, value) => {
-        setFormData((prev) => ({ ...prev, [field]: value }));
+        setFormData((prev) => ({...prev, [field]: value}));
     };
 
     const handleRegister = async () => {
@@ -104,7 +108,7 @@ export default function Register({ navigation }) {
                     <MaterialIcons
                         name={showPassword ? 'visibility' : 'visibility-off'}
                         size={24}
-                        color={colors.text}
+                        color={theme.text}
                     />
                 </TouchableOpacity>
             </View>
@@ -131,51 +135,51 @@ export default function Register({ navigation }) {
     );
 }
 
-const styles = StyleSheet.create({
+const getStyles = (theme) => StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
         padding: spacing.md,
-        backgroundColor: colors.background,
+        backgroundColor: theme.background,
     },
     title: {
         fontSize: 32,
         fontWeight: '700',
         marginBottom: spacing.lg,
-        color: colors.primary,
+        color: theme.primary,
         textAlign: 'center',
     },
     input: {
-        backgroundColor: colors.surface,
+        backgroundColor: theme.surface,
         padding: spacing.sm,
         borderRadius: 4,
         marginBottom: spacing.md,
         borderWidth: 1,
-        borderColor: colors.primary,
+        borderColor: theme.primary,
     },
     button: {
-        backgroundColor: colors.primary,
+        backgroundColor: theme.primary,
         padding: spacing.md,
         borderRadius: 4,
         alignItems: 'center',
         marginBottom: spacing.sm,
     },
     buttonText: {
-        color: colors.white,
+        color: theme.white,
         fontWeight: '600',
     },
     link: {
-        color: colors.primary,
+        color: theme.primary,
         textAlign: 'center',
         marginTop: spacing.sm,
     },
     passwordContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: colors.surface,
+        backgroundColor: theme.surface,
         borderRadius: 4,
         borderWidth: 1,
-        borderColor: colors.primary,
+        borderColor: theme.primary,
         marginBottom: spacing.md,
         paddingHorizontal: spacing.sm,
     },
