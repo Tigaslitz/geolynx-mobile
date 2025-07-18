@@ -14,6 +14,7 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const getUser = async () => {
+        console.log("ZANGADO");
         try {
             const response = await api.get('/user');
             setUser(response.data);
