@@ -40,9 +40,6 @@ export default function ProfileScreen({navigation}) {
     useEffect(() => {
         const fetchUser = async () => {
             const data = await getUser();
-            console.log("aqui ", {
-                data
-            })
             setUser(data);
         };
         fetchUser();

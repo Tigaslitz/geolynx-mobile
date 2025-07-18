@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import api from '../services/api';
+import {useUser} from "./UserContext";
 
 const AuthContext = createContext();
 
@@ -13,45 +13,24 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const {user, setUser, getUser} = useUser();
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        // Since there's no /user/me endpoint and authentication is cookie-based,
-        // we'll check if the user has a session by trying to list users (which requires auth)
-        // This is not ideal but works with the current backend
-        const checkLoggedIn = async () => {
-            try {
-                // Try to make an authenticated request
-                await api.post('/user/account-status', { identificador: 'test' });
-                // If it succeeds, user is logged in
+        const loadUser = async () => {
+            const check = await getUser();
+            if (check)
                 setIsAuthenticated(true);
-                // We don't have user data from backend, so we'll store it locally
-                const storedUser = await AsyncStorage.getItem('user');
-                if (storedUser) {
-                    setUser(JSON.parse(storedUser));
-                }
-            } catch (error) {
-                // If it fails with 401, user is not logged in
-                if (error.response?.status === 401) {
-                    setIsAuthenticated(false);
-                    await AsyncStorage.removeItem('user');
-                }
-            }
             setLoading(false);
         };
-        checkLoggedIn();
+        loadUser();
     }, []);
 
     const login = async (email, password) => {
         try {
-            // The login endpoint returns 204 No Content with a session cookie
             await api.post('/user/login', { email, password });
-            // Store minimal user info locally since backend doesn't return it
-            const userData = { username: email };
-            await AsyncStorage.setItem('user', JSON.stringify(userData));
-            setUser(userData);
+            await getUser();
             setIsAuthenticated(true);
             return { success: true };
         } catch (error) {
@@ -76,12 +55,10 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
-            await api.post('/user/logout', {});
+            await api.post('/user/logout');
         } catch (error) {
             console.error('Logout failed', error);
         } finally {
-            await AsyncStorage.removeItem('user');
-            setUser(null);
             setIsAuthenticated(false);
         }
     };

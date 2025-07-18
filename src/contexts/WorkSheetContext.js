@@ -29,7 +29,6 @@ export const WorkSheetProvider = ({ children }) => {
         setLoading(true);
         try {
             const response = await api.get(`/work-sheet/${id}`);
-            console.log("pimpolho", response.data.metadata);
             setCurrentSheet(response.data);
             return response.data;
         } catch (error) {
@@ -54,9 +53,9 @@ export const WorkSheetProvider = ({ children }) => {
     };
 
 
-    useEffect(() => {
-        fetchWorkSheets();
-    }, []);
+    //useEffect(() => {
+        //fetchWorkSheets();
+    //}, []);
 
     const value = {
         worksheets,

@@ -28,11 +28,8 @@ export default function Login({navigation}) {
         setLoading(true);
         try {
             const result = await login(email, password);
-            if (result.success) {
-                navigation.replace('Home');
-            } else {
+            if (!result.success)
                 Alert.alert('Inválido', result.error || 'Credenciais inválidas');
-            }
         } catch {
             Alert.alert('Inválido', 'Credenciais inválidas');
         } finally {

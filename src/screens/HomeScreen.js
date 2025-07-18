@@ -10,13 +10,15 @@ import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
 import api from '../services/api';
 import {useUser} from "../contexts/UserContext";
-import {getTheme} from "../services/GeneralFunctions"; // supondo que manténs a camada de API
+import {getTheme} from "../services/GeneralFunctions";
+import {useWorkSheets} from "../contexts/WorkSheetContext"; // supondo que manténs a camada de API
 
 export default function Home({navigation}) {
-    const {user} = useAuth();
+    const {user} = useUser();
+    const { logout } = useAuth();
+    const {worksheets, fetchWorkSheets} = useWorkSheets();
     const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
-    console.log("styles ", styles);
     const [totalUsers, setTotalUsers] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -33,6 +35,12 @@ export default function Home({navigation}) {
             .then(res => setTotalUsers(res.data.count))
             .catch(() => setTotalUsers('-'))
             .finally(() => setLoading(false));
+    }, []);
+    useEffect(() => {
+        const loadWorkSheets = async () => {
+            await fetchWorkSheets();
+        };
+        loadWorkSheets();
     }, []);
 
     const StatCard = ({ title, value, iconName, iconColor }) => (
@@ -63,7 +71,7 @@ export default function Home({navigation}) {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.header}>
-                <Text style={styles.welcome}>Bem‑vindo, {user.username}!</Text>
+                <Text style={styles.welcome}>Bem‑vindo, {user.fullName}!</Text>
                 <TouchableOpacity
                     style={styles.profileButton}
                     onPress={() => navigation.navigate('Profile')}
@@ -121,6 +129,10 @@ export default function Home({navigation}) {
                         role="SYSADMIN"
                     />
                 </View>
+                <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+                    <MaterialIcons name="logout" size={24} color={theme.white} />
+                    <Text style={styles.logoutText}>Terminar Sessão</Text>
+                </TouchableOpacity>
             </ScrollView>
         </SafeAreaView>
     );
@@ -207,5 +219,20 @@ const getStyles = (theme) => StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 100,
+    },
+    logoutButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: spacing.lg,
+        backgroundColor: theme.secondary,
+        padding: spacing.md,
+        borderRadius: 8,
+    },
+    logoutText: {
+        color: theme.white,
+        marginLeft: spacing.sm,
+        fontSize: 16,
+        fontWeight: '600',
     },
 });

@@ -31,7 +31,6 @@ export default function Register({navigation}) {
     useEffect(() => {
         const loadTheme = async () => {
             const themeMode = await startupTheme();
-            console.log("aqui", themeMode);
             setTheme(themeMode === 'dark' ? darkmode : lightmode);
         };
         loadTheme();

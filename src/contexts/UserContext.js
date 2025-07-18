@@ -14,14 +14,12 @@ export const UserProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     const getUser = async () => {
-        console.log("ZANGADO");
         try {
             const response = await api.get('/user');
             setUser(response.data);
             return response.data;
         } catch (error) {
-            console.error('Erro ao encontrar utilizador:', error);
-            return null;
+            console.error('Utilizador não encontrado:', error);
         } finally {
             setLoading(false);
         }
@@ -63,12 +61,13 @@ export const UserProvider = ({ children }) => {
         }
     };
 
-    useEffect(() => {
-        getUser();
-    }, []);
+    //useEffect(() => {
+        //getUser();
+    //}, []);
 
     const value = {
         user,
+        setUser,
         loading,
         getUser,
         updateUser,
