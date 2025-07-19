@@ -43,10 +43,10 @@ export default function AccountManagement() {
         if (user) {
             setForm({
                 fullName: user.fullName || '',
-                phonePrimary: user.phone || '',
+                phonePrimary: user.phonePrimary || '',
                 address: user.address || '',
                 postalCode: user.postalCode || '',
-                dateOfBirth: user.birthDate || '',
+                dateOfBirth: user.dateOfBirth || '',
                 nationality: user.nationality || '',
                 residence: user.residence || '',
             });
@@ -62,6 +62,7 @@ export default function AccountManagement() {
             .filter(([_, value]) => value && value.trim() !== '')
             .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
 
+        console.log('Payload to update:', payload);
         const result = await updateUser(user, payload);
         Keyboard.dismiss();
 
@@ -127,7 +128,7 @@ export default function AccountManagement() {
                     <Text
                         style={{
                             fontSize: 16,
-                            color: form.dateOfBirth ? colors.text : colors.surface,
+                            color: theme.text,
                         }}
                     >
                         {form.dateOfBirth || 'Seleciona a data'}

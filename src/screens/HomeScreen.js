@@ -1,17 +1,22 @@
-// File: src/screens/Home.js
-
 import React, { useEffect, useState } from 'react';
 import {ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator,Image,} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import roleScreens from '../components/roleScreens';
 import { MaterialIcons } from '@expo/vector-icons';
-import { useAuth } from '../contexts/AuthContext';
 import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
 import api from '../services/api';
 import {useUser} from "../contexts/UserContext";
 import {getTheme} from "../services/GeneralFunctions";
-import {useWorkSheets} from "../contexts/WorkSheetContext"; // supondo que manténs a camada de API
+
+const screenButtons = [
+    { name: 'ListUsers', label: 'Listar Usuários' },
+    { name: 'ExecutionSheets', label: 'Nova Operação' },
+    { name: 'Profile', label: 'Perfil' },
+    { name: 'WorkSheetList', label: 'Minhas Fichas' },
+    // Adicione todos os botões/screens
+];
 
 export default function Home({navigation}) {
     const {user} = useUser();
@@ -30,13 +35,6 @@ export default function Home({navigation}) {
         return unsubscribe;
     }, [navigation]);
 
-    useEffect(() => {
-        const loadTheme = async () => {
-            const themeMode = await getTheme();
-            setTheme(themeMode === 'dark' ? darkmode : lightmode);
-        };
-        loadTheme();
-    }, []);
 
     useEffect(() => {
         api.get('/users/count')
@@ -57,7 +55,7 @@ export default function Home({navigation}) {
         const { hasRole } = useUser();
         const navigation = useNavigation();
 
-        if (role && !hasRole(role)) return null;
+        if (!roleScreens[user.role]?.includes(path)) return null;
 
         return (
             <TouchableOpacity
@@ -129,7 +127,6 @@ export default function Home({navigation}) {
                         title="Gerir Utilizadores"
                         iconName="people"
                         path="ListUsers"
-                        role="SYSADMIN"
                     />
                 </View>
             </ScrollView>
