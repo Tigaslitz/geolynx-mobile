@@ -25,6 +25,16 @@ export const UserProvider = ({ children }) => {
             setLoading(false);
         }
     };
+    const listUsers = async () => {
+        try {
+            const response = await api.get('/user/all');
+            return response.data;
+        }catch (error) {
+            console.error('Erro ao listar utilizadores:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const hasRole = (role) => {
         return user?.role === role;
@@ -93,6 +103,7 @@ export const UserProvider = ({ children }) => {
         deleteUser,
         hasRole,
         hasPermission,
+        listUsers,
     };
     return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 };

@@ -17,6 +17,9 @@ export const lightmode ={
     background: '#F6F6F6',
     text: '#000000',
     surface: '#FFFFFF',
+    infoBackground: '#E6F4EA',
+    cardShadow: '#00000020',
+    accent: '#25a960',
 }
 
 export const darkmode = {
@@ -28,6 +31,9 @@ export const darkmode = {
     background: '#121212',
     text: '#F6F6F6',
     surface: '#000000',
+    infoBackground: '#1E1E1E',
+    cardShadow: '#00000040',
+    accent: '#25a960',
 }
 
 export default colors;

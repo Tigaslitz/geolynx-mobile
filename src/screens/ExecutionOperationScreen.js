@@ -25,29 +25,42 @@ export default function ExecutionOperationScreen({ route }) {
 
                 {operations.map((op, idx) => (
                     <View key={idx} style={styles.card}>
-                        <Text style={styles.label}>Código</Text>
-                        <Text style={styles.value}>{op.operationCode}</Text>
+                        <Text style={styles.code}>{op.operationCode}</Text>
 
-                        <Text style={styles.label}>Área Executada (ha)</Text>
-                        <Text style={styles.value}>{op.areaHaExecuted}</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Área Executada:</Text>
+                            <Text style={styles.value}>{op.areaHaExecuted} ha</Text>
+                        </View>
 
-                        <Text style={styles.label}>Percentagem (%)</Text>
-                        <Text style={styles.value}>{op.areaPerc}</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Percentagem:</Text>
+                            <Text style={styles.value}>{op.areaPerc}%</Text>
+                        </View>
 
-                        <Text style={styles.label}>Início</Text>
-                        <Text style={styles.value}>{op.startingDate}</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Início:</Text>
+                            <Text style={styles.value}>{op.startingDate}</Text>
+                        </View>
 
-                        <Text style={styles.label}>Fim</Text>
-                        <Text style={styles.value}>{op.finishingDate}</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Fim:</Text>
+                            <Text style={styles.value}>{op.finishingDate}</Text>
+                        </View>
 
-                        <Text style={styles.label}>Planeado (até)</Text>
-                        <Text style={styles.value}>{op.plannedCompletionDate}</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Planeado (até):</Text>
+                            <Text style={styles.value}>{op.plannedCompletionDate}</Text>
+                        </View>
 
-                        <Text style={styles.label}>Duração Estimada (h)</Text>
-                        <Text style={styles.value}>{op.estimatedDurationHours}</Text>
+                        <View style={styles.row}>
+                            <Text style={styles.label}>Duração Estimada:</Text>
+                            <Text style={styles.value}>{op.estimatedDurationHours} h</Text>
+                        </View>
 
-                        <Text style={styles.label}>Observações</Text>
-                        <Text style={styles.value}>{op.observations || '-'}</Text>
+                        <View style={[styles.row, { marginTop: spacing.sm }]}>
+                            <Text style={styles.label}>Observações:</Text>
+                        </View>
+                        <Text style={styles.observations}>{op.observations || '-'}</Text>
                     </View>
                 ))}
             </ScrollView>
@@ -55,42 +68,60 @@ export default function ExecutionOperationScreen({ route }) {
     );
 }
 
-const getStyles = (theme) => StyleSheet.create({
-    safeArea: {
-        flex: 1,
-        backgroundColor: theme.background,
-    },
-    container: {
-        padding: spacing.lg,
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: '700',
-        color: theme.primary,
-        marginBottom: spacing.lg,
-        textAlign: 'center',
-    },
-    card: {
-        backgroundColor: theme.background,
-        borderRadius: 8,
-        borderWidth: 1,
-        borderColor: theme.primary,
-        padding: spacing.md,
-        marginBottom: spacing.md,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.2,
-        shadowRadius: 3,
-        elevation: 2,
-    },
-    label: {
-        fontWeight: '600',
-        color: theme.text,
-        marginBottom: 4,
-    },
-    value: {
-        marginBottom: spacing.sm,
-        fontSize: 16,
-        color: theme.text,
-    },
-});
+const getStyles = (theme) =>
+    StyleSheet.create({
+        safeArea: {
+            flex: 1,
+            backgroundColor: theme.background,
+        },
+        container: {
+            padding: spacing.lg,
+        },
+        title: {
+            fontSize: 26,
+            fontWeight: '800',
+            color: theme.primary,
+            marginBottom: spacing.lg,
+            textAlign: 'center',
+        },
+        card: {
+            backgroundColor: theme.infoBackground || (theme === darkmode ? '#1E1E1E' : '#F0FAF4'),
+            borderLeftWidth: 5,
+            borderLeftColor: theme.accent || theme.primary,
+            borderRadius: 12,
+            padding: spacing.lg,
+            marginBottom: spacing.md,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.1,
+            shadowRadius: 6,
+            elevation: 3,
+        },
+        code: {
+            fontSize: 18,
+            fontWeight: '700',
+            color: theme.primary,
+            marginBottom: spacing.md,
+        },
+        row: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: 6,
+        },
+        label: {
+            fontSize: 14,
+            color: theme.text,
+            fontWeight: '600',
+        },
+        value: {
+            fontSize: 16,
+            color: theme.text,
+            fontWeight: '500',
+        },
+        observations: {
+            fontStyle: 'italic',
+            fontSize: 15,
+            color: theme.text,
+            marginTop: 4,
+        },
+    });

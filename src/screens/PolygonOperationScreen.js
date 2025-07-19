@@ -198,8 +198,8 @@ const getStyles = (theme) => StyleSheet.create({
         padding: spacing.lg,
     },
     title: {
-        fontSize: 28,
-        fontWeight: '700',
+        fontSize: 26,
+        fontWeight: '800',
         color: theme.primary,
         marginBottom: spacing.lg,
         textAlign: 'center',
@@ -207,10 +207,15 @@ const getStyles = (theme) => StyleSheet.create({
     detailBlock: {
         marginBottom: spacing.lg,
         backgroundColor: theme.surface,
-        borderRadius: 8,
-        borderColor: theme.primary,
-        borderWidth: 1,
-        padding: spacing.md,
+        borderLeftWidth: 5,
+        borderLeftColor: theme.accent || theme.primary,
+        borderRadius: 12,
+        padding: spacing.lg,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.05,
+        shadowRadius: 4,
+        elevation: 2,
     },
     detailTitle: {
         fontSize: 18,
@@ -222,14 +227,14 @@ const getStyles = (theme) => StyleSheet.create({
         marginBottom: spacing.sm,
     },
     label: {
-        fontWeight: '800',
-        fontSize: 15,
+        fontSize: 14,
+        fontWeight: '600',
         color: theme.text,
         marginBottom: 2,
     },
     value: {
-        color: theme.text,
         fontSize: 16,
+        color: theme.text,
     },
     tracksContainer: {
         marginTop: spacing.md,
@@ -237,28 +242,36 @@ const getStyles = (theme) => StyleSheet.create({
     trackBlock: {
         marginBottom: spacing.md,
         backgroundColor: theme.background,
-        borderRadius: 8,
+        borderRadius: 12,
         padding: spacing.sm,
         borderWidth: 1,
         borderColor: theme.primary,
+        overflow: 'hidden',
     },
     trackType: {
         fontSize: 15,
         fontWeight: '600',
-        color: theme.text,
-        marginBottom: 4,
+        color: theme.primary,
+        marginBottom: 6,
     },
     map: {
         width: '100%',
         height: 200,
-        borderRadius: 8,
+        borderRadius: 10,
+        overflow: 'hidden',
     },
     startButton: {
         marginTop: spacing.lg,
         backgroundColor: theme.primary,
-        padding: spacing.md,
-        borderRadius: 8,
+        paddingVertical: spacing.md,
+        paddingHorizontal: spacing.lg,
+        borderRadius: 10,
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     buttonText: {
         color: theme.white,
@@ -266,7 +279,7 @@ const getStyles = (theme) => StyleSheet.create({
         fontWeight: '600',
     },
     disabledButton: {
-        backgroundColor: theme.background,
+        backgroundColor: theme.surface,
         opacity: 0.5,
         borderWidth: 1,
         borderColor: theme.primary,
@@ -274,5 +287,5 @@ const getStyles = (theme) => StyleSheet.create({
     disabledButtonText: {
         color: theme.primary,
         opacity: 0.5,
-    }
+    },
 });
