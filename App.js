@@ -26,6 +26,8 @@ import NotFound from './src/screens/NotFoundScreen';
 import WorkSheetList from "./src/screens/WorkSheetListScreen";
 import WorkSheet from "./src/screens/WorkSheetScreen";
 import OperationsScreen from './src/screens/OperationsScreen';
+import SettingsScreen from "./src/screens/SettingsScreen";
+import UserManualScreen from "./src/screens/UserManualScreen";
 
 
 export default function App() {
@@ -72,6 +74,8 @@ function AppNavigator() {
                     <Stack.Screen name="WorkSheetList" component={WorkSheetList} />
                     <Stack.Screen name="WorkSheet" component={WorkSheet} />
                     <Stack.Screen name="OperationsScreen" component={OperationsScreen} />
+                    <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+                    <Stack.Screen name="UserManualScreen" component={UserManualScreen}/>
                 </>
             ) : (
                 <>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import api from '../services/api';
+import {logoutTheme} from "../services/GeneralFunctions";
 
 const UserContext = createContext();
 
@@ -61,6 +62,24 @@ export const UserProvider = ({ children }) => {
         }
     };
 
+    const deleteUser = async (user) => {
+        try{
+            await logoutTheme();
+            const payload = {
+                identificador: user.email,
+            };
+            const response = await api.post('/user/remove', payload);
+
+            return { success: true, data: refreshedUser };
+        } catch (error) {
+            console.error('Erro ao apagar utilizador:', error);
+            return {
+                success: false,
+                error: error.response?.data?.message || 'Erro inesperado ao apagar utilizador',
+            };
+        }
+    };
+
     //useEffect(() => {
         //getUser();
     //}, []);
@@ -71,6 +90,7 @@ export const UserProvider = ({ children }) => {
         loading,
         getUser,
         updateUser,
+        deleteUser,
         hasRole,
         hasPermission,
     };

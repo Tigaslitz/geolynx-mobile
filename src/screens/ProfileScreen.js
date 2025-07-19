@@ -23,6 +23,16 @@ export default function ProfileScreen({navigation}) {
             const themeMode = await getTheme();
             setTheme(themeMode === 'dark' ? darkmode : lightmode);
         };
+        const unsubscribe = navigation.addListener('focus', loadTheme); // 👈 recheck theme when screen regains focus
+
+        return unsubscribe;
+    }, [navigation]);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
         loadTheme();
     }, []);
 
@@ -63,6 +73,13 @@ export default function ProfileScreen({navigation}) {
 
             <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
                 <Text style={styles.editText}>Editar Perfil</Text>
+            </TouchableOpacity>
+            {/* New: Button to go to Settings */}
+            <TouchableOpacity
+                style={styles.settingsButton}
+                onPress={() => navigation.navigate('SettingsScreen')}
+            >
+                <Text style={styles.settingsText}>Definições</Text>
             </TouchableOpacity>
         </View>
     );
@@ -122,5 +139,19 @@ const getStyles = (theme) => StyleSheet.create({
         width: 120,
         height: 120,
         resizeMode: 'contain',
+    },
+
+    settingsButton: {
+        marginTop: spacing.lg,
+        paddingVertical: spacing.sm,
+        paddingHorizontal: spacing.lg,
+        backgroundColor: theme.secondary,
+        borderRadius: 8,
+    },
+
+    settingsText: {
+        color: theme.white,
+        fontSize: 16,
+        fontWeight: '500',
     },
 });

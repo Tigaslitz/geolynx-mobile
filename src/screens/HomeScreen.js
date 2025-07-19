@@ -27,6 +27,16 @@ export default function Home({navigation}) {
             const themeMode = await getTheme();
             setTheme(themeMode === 'dark' ? darkmode : lightmode);
         };
+        const unsubscribe = navigation.addListener('focus', loadTheme); // 👈 recheck theme when screen regains focus
+
+        return unsubscribe;
+    }, [navigation]);
+
+    useEffect(() => {
+        const loadTheme = async () => {
+            const themeMode = await getTheme();
+            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+        };
         loadTheme();
     }, []);
 

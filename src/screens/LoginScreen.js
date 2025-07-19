@@ -61,7 +61,7 @@ export default function Login({navigation}) {
                     />
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
+            <TouchableOpacity style={styles.button} onPress={() => handleLogin()} disabled={loading}>
                 <Text style={styles.buttonText}>{loading ? 'A carregar...' : 'Entrar'}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('Register')}><Text style={styles.link}>Não tens conta?

@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 import {useUser} from "./UserContext";
+import {logoutTheme} from "../services/GeneralFunctions";
 
 const AuthContext = createContext();
 
@@ -55,6 +56,7 @@ export const AuthProvider = ({ children }) => {
 
     const logout = async () => {
         try {
+            await logoutTheme();
             await api.post('/user/logout');
         } catch (error) {
             console.error('Logout failed', error);
