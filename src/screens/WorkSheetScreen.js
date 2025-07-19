@@ -142,7 +142,7 @@ const getStyles = (theme) => StyleSheet.create({
         marginBottom: 4,
     },
     input: {
-        backgroundColor: theme.white,
+        backgroundColor: theme.surface,
         borderColor: theme.primary,
         borderWidth: 1,
         borderRadius: 6,

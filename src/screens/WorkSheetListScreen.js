@@ -7,7 +7,7 @@ import {getTheme} from "../services/GeneralFunctions";
 import {darkmode, lightmode} from "../theme/colors";
 
 export default function WorkSheetList({ navigation }) {
-    const { worksheets, loading } = useWorkSheets();
+    const { worksheets,fetchWorkSheets, loading } = useWorkSheets();
     const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
 
@@ -17,6 +17,13 @@ export default function WorkSheetList({ navigation }) {
             setTheme(themeMode === 'dark' ? darkmode : lightmode);
         };
         loadTheme();
+    }, []);
+
+    useEffect(() => {
+        const loadWorkSheets = async () => {
+            await fetchWorkSheets();
+        };
+        loadWorkSheets();
     }, []);
 
     if (loading) {

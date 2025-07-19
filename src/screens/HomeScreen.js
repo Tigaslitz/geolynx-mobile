@@ -15,8 +15,6 @@ import {useWorkSheets} from "../contexts/WorkSheetContext"; // supondo que mant�
 
 export default function Home({navigation}) {
     const {user} = useUser();
-    const { logout } = useAuth();
-    const {worksheets, fetchWorkSheets} = useWorkSheets();
     const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const [totalUsers, setTotalUsers] = useState(null);
@@ -27,7 +25,7 @@ export default function Home({navigation}) {
             const themeMode = await getTheme();
             setTheme(themeMode === 'dark' ? darkmode : lightmode);
         };
-        const unsubscribe = navigation.addListener('focus', loadTheme); // 👈 recheck theme when screen regains focus
+        const unsubscribe = navigation.addListener('focus', loadTheme); // recheck theme when screen regains focus
 
         return unsubscribe;
     }, [navigation]);
@@ -45,12 +43,6 @@ export default function Home({navigation}) {
             .then(res => setTotalUsers(res.data.count))
             .catch(() => setTotalUsers('-'))
             .finally(() => setLoading(false));
-    }, []);
-    useEffect(() => {
-        const loadWorkSheets = async () => {
-            await fetchWorkSheets();
-        };
-        loadWorkSheets();
     }, []);
 
     const StatCard = ({ title, value, iconName, iconColor }) => (
@@ -81,18 +73,19 @@ export default function Home({navigation}) {
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.header}>
-                <Text style={styles.welcome}>Bem‑vindo, {user.fullName}!</Text>
+                <Text
+                    style={styles.welcome}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                >
+                    Bem‑vindo, {user.fullName}!
+                </Text>
                 <TouchableOpacity
                     style={styles.profileButton}
                     onPress={() => navigation.navigate('Profile')}
                 >
                     <Image
-                        source={
-                            require('../../assets/Logo_GeoLynx.png')
-                            /*user.avatarUrl
-                                ? { uri: user.avatarUrl }
-                                : require('../../assets/Logo_GeoLynx.png')*/
-                        }
+                        source={require('../../assets/Logo_GeoLynx.png')}
                         style={styles.profileImage}
                     />
                 </TouchableOpacity>
@@ -139,10 +132,6 @@ export default function Home({navigation}) {
                         role="SYSADMIN"
                     />
                 </View>
-                <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-                    <MaterialIcons name="logout" size={24} color={theme.white} />
-                    <Text style={styles.logoutText}>Terminar Sessão</Text>
-                </TouchableOpacity>
             </ScrollView>
         </SafeAreaView>
     );
@@ -153,12 +142,21 @@ const getStyles = (theme) => StyleSheet.create({
         padding: spacing.md,
         backgroundColor: theme.background,
     },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: spacing.lg,
+        paddingHorizontal: spacing.md,
+    },
     welcome: {
+        flex: 1,
         fontSize: 24,
         fontWeight: '600',
         marginBottom: spacing.lg,
         color: theme.text,
-        paddingLeft:20
+        paddingLeft: 20,
+        flexShrink: 1,
     },
     statsRow: {
         flexDirection: 'row',
@@ -212,12 +210,6 @@ const getStyles = (theme) => StyleSheet.create({
     safeArea: {
         flex: 1,
         backgroundColor: theme.background,
-    },
-    header: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: spacing.lg,
     },
     profileButton: {
         marginRight: 5,
