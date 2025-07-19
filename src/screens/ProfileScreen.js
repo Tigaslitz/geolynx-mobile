@@ -190,7 +190,10 @@ export default function ProfileScreen({navigation}) {
 
                 <View style={styles.footer}>
                     <Text style={styles.footerText}>Versão {Constants.expoConfig?.version || '1.0.0'}</Text>
-                    <Text style={styles.footerText}>© {new Date().getFullYear()} GeoLynx</Text>
+                    <Text style={styles.footerText}>© {new Date().getFullYear()}
+                        <Text style={{ fontWeight: 'bold', color: theme.primary }}> Geo</Text>
+                        <Text style={{ fontWeight: 'bold', color: theme.secondary }}>Lynx</Text>
+                    </Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -207,15 +210,16 @@ const getStyles = (theme) => StyleSheet.create({
     },
 
     avatar: {
-        width: 100,
-        height: 100,
-        borderRadius: 50,
+        width: 130,
+        height: 130,
+        borderRadius: 100,
         marginBottom: spacing.lg,
         backgroundColor: theme.white,
+        marginTop:50,
     },
 
     name: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: '600',
         color: theme.text,
         marginBottom: spacing.sm,
@@ -228,14 +232,14 @@ const getStyles = (theme) => StyleSheet.create({
     },
 
     editButton: {
-        paddingVertical: spacing.sm,
-        paddingHorizontal: spacing.lg,
+        paddingVertical: 16,
+        paddingHorizontal: 132,
         backgroundColor: theme.primary,
         borderRadius: 8,
     },
 
     editText: {
-        color: theme.white,
+        color: theme.background,
         fontSize: 16,
         fontWeight: '500',
     },
@@ -315,7 +319,7 @@ const getStyles = (theme) => StyleSheet.create({
         paddingHorizontal: 95,
         borderRadius: 8,
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 30,
     },
     manualText: {
         color: theme.background,
@@ -328,6 +332,7 @@ const getStyles = (theme) => StyleSheet.create({
         borderRadius: 10,
         borderWidth: 1,
         marginTop: 10,
+        minWidth: 350,
     },
 
     previewLogo: {
