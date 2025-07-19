@@ -21,8 +21,9 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const loadUser = async () => {
             const check = await getUser();
-            if (check)
+            if (check) {
                 setIsAuthenticated(true);
+            }
             setLoading(false);
         };
         loadUser();

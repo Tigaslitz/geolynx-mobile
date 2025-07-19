@@ -7,6 +7,7 @@ import { WorkSheetProvider } from './src/contexts/WorkSheetContext';
 import {ExecutionSheetProvider} from "./src/contexts/ExecutionSheetContext";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import roleScreens from './src/components/roleScreens';
 
 // Screens (convert cada página web num screen React Native)
 import Login from './src/screens/LoginScreen';
@@ -34,6 +35,10 @@ import PolygonOperationScreen from "./src/screens/PolygonOperationScreen";
 import SettingsScreen from "./src/screens/SettingsScreen";
 import UserManualScreen from "./src/screens/UserManualScreen";
 
+// 3. Função para filtrar screens
+function getScreensForRole(role) {
+    return roleScreens[role] || [];
+}
 
 export default function App() {
     const queryClient = new QueryClient();
@@ -55,48 +60,38 @@ export default function App() {
 }
 
 function AppNavigator() {
-    const { loading, isAuthenticated } = useAuth();
-
-    if (loading) {
-        return <LoadingSpinner />
-    }
+    const { loading, isAuthenticated, user } = useAuth();
+    if (loading) return <LoadingSpinner />;
     const Stack = createNativeStackNavigator();
+
+    if (!isAuthenticated) {
+        return (
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Register" component={Register} />
+                <Stack.Screen name="NotFound" component={NotFound} />
+            </Stack.Navigator>
+        );
+    }
+
+    // Verifique se user e user.role existem
+    const allowedScreens = user && user.role ? getScreensForRole(user.role) : [];
+
+    const screenComponents = {
+        Home, ListUsers, Profile, AccountManagement, AccountRemovalRequests,
+        ChangeAttributes, ChangePassword, ChangeRole, Map: MapScreen, RequestAccountRemoval,
+        WorksheetCreate, WorksheetUpdate, WorkSheetList, WorkSheet, Operations: OperationsScreen,
+        ExecutionSheets: ExecutionSheetsScreen, ExecutionSheetDetail: ExecutionSheetDetailScreen,
+        ExecutionOperation: ExecutionOperationScreen, PolygonOperation: PolygonOperationScreen,
+        SettingsScreen, UserManualScreen
+    };
+
     return (
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-            {isAuthenticated ? (
-                <>
-                    {/* Rotas privadas */}
-                    <Stack.Screen name="Home" component={Home} />
-                    <Stack.Screen name="ListUsers" component={ListUsers} />
-                    <Stack.Screen name="Profile" component={Profile} />
-                    <Stack.Screen name="AccountManagement" component={AccountManagement} />
-                    <Stack.Screen name="AccountRemovalRequests" component={AccountRemovalRequests} />
-                    <Stack.Screen name="ChangeAttributes" component={ChangeAttributes} />
-                    <Stack.Screen name="ChangePassword" component={ChangePassword} />
-                    <Stack.Screen name="ChangeRole" component={ChangeRole} />
-                    <Stack.Screen name="Map" component={MapScreen} />
-                    <Stack.Screen name="RequestAccountRemoval" component={RequestAccountRemoval} />
-                    <Stack.Screen name="WorksheetCreate" component={WorksheetCreate} />
-                    <Stack.Screen name="WorksheetUpdate" component={WorksheetUpdate} />
-                    <Stack.Screen name="WorkSheetList" component={WorkSheetList} />
-                    <Stack.Screen name="WorkSheet" component={WorkSheet} />
-                    <Stack.Screen name="Operations" component={OperationsScreen} />
-                    <Stack.Screen name="ExecutionSheets" component={ExecutionSheetsScreen} />
-                    <Stack.Screen name="ExecutionSheetDetail" component={ExecutionSheetDetailScreen} />
-                    <Stack.Screen name="ExecutionOperation" component={ExecutionOperationScreen}/>
-                    <Stack.Screen name="PolygonOperation" component={PolygonOperationScreen}/>
-                    <Stack.Screen name="OperationsScreen" component={OperationsScreen} />
-                    <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
-                    <Stack.Screen name="UserManualScreen" component={UserManualScreen}/>
-                </>
-            ) : (
-                <>
-                    {/* Rotas públicas */}
-                    <Stack.Screen name="Login" component={Login} />
-                    <Stack.Screen name="Register" component={Register} />
-                </>
+            {allowedScreens.map(screenName =>
+                screenComponents[screenName] &&
+                <Stack.Screen key={screenName} name={screenName} component={screenComponents[screenName]} />
             )}
-            {/* Rota catch-all */}
             <Stack.Screen name="NotFound" component={NotFound} />
         </Stack.Navigator>
     );
