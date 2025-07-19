@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ScrollView, Image} from 'react-native';
 import { useAuth } from '../contexts/AuthContext';
 import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
@@ -39,33 +39,40 @@ export default function Login({navigation}) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Login</Text>
-            <TextInput style={styles.input} placeholder="Email" placeholderTextColor={theme.text} keyboardType="email-address" autoCapitalize="none"
-                       value={email} onChangeText={setEmail}/>
-            <View style={styles.passwordContainer}>
-                <TextInput
-                    style={styles.passwordInput}
-                    placeholder="Password"
-                    placeholderTextColor={theme.text}
-                    secureTextEntry={!showPassword}
-                    value={password}
-                    onChangeText={setPassword}
-                    autoCapitalize="none"
-                    autoCorrect={false}
+            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                <Image
+                    source={require('../../assets/Logo_GeoLynx.png')}
+                    style={styles.logo}
+                    resizeMode="contain"
                 />
-                <TouchableOpacity onPress={() => setShowPassword(prev => !prev)}>
-                    <MaterialIcons
-                        name={showPassword ? 'visibility' : 'visibility-off'}
-                        size={24}
-                        color={theme.text}
+                <Text style={styles.title}>Login</Text>
+                <TextInput style={styles.input} placeholder="Email" placeholderTextColor={theme.text} keyboardType="email-address" autoCapitalize="none"
+                           value={email} onChangeText={setEmail}/>
+                <View style={styles.passwordContainer}>
+                    <TextInput
+                        style={styles.passwordInput}
+                        placeholder="Password"
+                        placeholderTextColor={theme.text}
+                        secureTextEntry={!showPassword}
+                        value={password}
+                        onChangeText={setPassword}
+                        autoCapitalize="none"
+                        autoCorrect={false}
                     />
+                    <TouchableOpacity onPress={() => setShowPassword(prev => !prev)}>
+                        <MaterialIcons
+                            name={showPassword ? 'visibility' : 'visibility-off'}
+                            size={24}
+                            color={theme.text}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.button} onPress={() => handleLogin()} disabled={loading}>
+                    <Text style={styles.buttonText}>{loading ? 'A carregar...' : 'Entrar'}</Text>
                 </TouchableOpacity>
-            </View>
-            <TouchableOpacity style={styles.button} onPress={() => handleLogin()} disabled={loading}>
-                <Text style={styles.buttonText}>{loading ? 'A carregar...' : 'Entrar'}</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}><Text style={styles.link}>Não tens conta?
-                Regista-te</Text></TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('Register')}><Text style={styles.link}>Não tens conta?
+                    Regista-te</Text></TouchableOpacity>
+            </ScrollView>
         </View>
 
     );
@@ -130,4 +137,24 @@ const getStyles = (theme) =>
         flex: 1,
         paddingVertical: spacing.sm,
     },
+     scrollContent: {
+         padding: spacing.md,
+         paddingBottom: 40,
+     },
+     logo: {
+         width: 150,
+         height: 150,
+         alignSelf: 'center',
+         marginTop:90,
+
+         // iOS shadow properties
+         shadowColor: theme.black,
+         shadowOffset: { width: 0, height: 2 },
+         shadowOpacity: 0.3,
+         shadowRadius: 3,
+
+         // Android elevation for shadow
+         elevation: 5,
+     }
+
 });

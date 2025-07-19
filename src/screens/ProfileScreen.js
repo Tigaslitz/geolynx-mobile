@@ -83,7 +83,7 @@ export default function ProfileScreen({navigation}) {
                     style: "destructive",
                     onPress: () => {
                         logout();
-                        navigation.reset('LoginScreen');
+                        //navigation.navigate('LoginScreen');
                     }
                 }
             ]
@@ -106,10 +106,7 @@ export default function ProfileScreen({navigation}) {
                         deleteUser();
                         // optionally, logout or navigate away after deletion
                         logout();
-                        navigation.reset({
-                            index: 0,
-                            routes: [{ name: 'LoginScreen' }],
-                        });
+                        //navigation.reset({ index: 0, routes: [{ name: 'LoginScreen' }], });
                     }
                 }
             ]

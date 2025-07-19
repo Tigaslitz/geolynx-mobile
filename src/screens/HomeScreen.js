@@ -115,7 +115,8 @@ export default function Home({navigation}) {
                     onPress={() => navigation.navigate('Profile')}
                 >
                     <Image
-                        source={require('../../assets/Logo_GeoLynx.png')}
+                        //source={require('../../assets/Logo_GeoLynx.png')}
+                        source={require('../../assets/defaultProfilePic.png')}
                         style={styles.profileImage}
                     />
                 </TouchableOpacity>
@@ -243,9 +244,9 @@ const getStyles = (theme) => StyleSheet.create({
     },
     profileButton: {
         marginRight: 5,
-        padding: spacing.xs,
+        padding: 2,
         borderRadius: 100,
-        backgroundColor: theme.text,
+        backgroundColor: theme.primary,
     },
     profileImage: {
         width: 50,

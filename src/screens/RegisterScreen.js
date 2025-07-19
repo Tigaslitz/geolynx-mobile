@@ -5,7 +5,7 @@ import {
     TextInput,
     TouchableOpacity,
     StyleSheet,
-    Alert,
+    Alert, ScrollView,
 } from 'react-native';
 import { spacing } from '../theme';
 import { colors, lightmode, darkmode} from '../theme/colors';
@@ -73,78 +73,98 @@ export default function Register({navigation}) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Registar</Text>
+            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
+                <Text style={styles.title}>Registar</Text>
 
-            <TextInput
-                style={styles.input}
-                placeholder="Username"
-                placeholderTextColor={theme.text}
-                value={formData.username}
-                onChangeText={(text) => handleChange('username', text)}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Nome completo"
-                placeholderTextColor={theme.text}
-                value={formData.fullName}
-                onChangeText={(text) => handleChange('fullName', text)}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                placeholderTextColor={theme.text}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                value={formData.email}
-                onChangeText={(text) => handleChange('email', text)}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="Telemóvel"
-                placeholderTextColor={theme.text}
-                keyboardType="phone-pad"
-                value={formData.phone}
-                onChangeText={(text) => handleChange('phone', text)}
-            />
-            <View style={styles.passwordContainer}>
                 <TextInput
-                    style={styles.passwordInput}
-                    placeholder="Password"
+                    style={styles.input}
+                    placeholder="Username"
                     placeholderTextColor={theme.text}
-                    secureTextEntry={!showPassword}
-                    value={formData.password}
-                    onChangeText={setFormData}
-                    autoCapitalize="none"
-                    autoCorrect={false}
+                    value={formData.username}
+                    onChangeText={(text) => handleChange('username', text)}
+                    autoCapitalize="words"
+                    textContentType="username"
+                    autoComplete="username"
                 />
-                <TouchableOpacity onPress={() => setShowPassword(prev => !prev)}>
-                    <MaterialIcons
-                        name={showPassword ? 'visibility' : 'visibility-off'}
-                        size={24}
-                        color={theme.text}
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Nome completo"
+                    placeholderTextColor={theme.text}
+                    value={formData.fullName}
+                    onChangeText={(text) => handleChange('fullName', text)}
+                    autoCapitalize="words"
+                    textContentType="name"
+                />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Email"
+                    placeholderTextColor={theme.text}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    value={formData.email}
+                    onChangeText={(text) => handleChange('email', text)}
+                    textContentType="emailAddress"
+                    autoComplete="email"
+                />
+
+                <TextInput
+                    style={styles.input}
+                    placeholder="Telemóvel"
+                    placeholderTextColor={theme.text}
+                    keyboardType="phone-pad"
+                    value={formData.phone}
+                    onChangeText={(text) => handleChange('phone', text)}
+                    textContentType="telephoneNumber"
+                    autoComplete="tel"
+                />
+
+                <View style={styles.passwordContainer}>
+                    <TextInput
+                        style={styles.passwordInput}
+                        placeholder="Password"
+                        placeholderTextColor={theme.text}
+                        secureTextEntry={!showPassword}
+                        value={formData.password}
+                        onChangeText={(text) => handleChange('password', text)}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        textContentType="newPassword"
+                        autoComplete="password"
                     />
+                    <TouchableOpacity onPress={() => setShowPassword(prev => !prev)}>
+                        <MaterialIcons
+                            name={showPassword ? 'visibility' : 'visibility-off'}
+                            size={24}
+                            color={theme.text}
+                        />
+                    </TouchableOpacity>
+                </View>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Confirmar Password"
+                    placeholderTextColor={theme.text}
+                    secureTextEntry
+                    value={formData.confirmPassword}
+                    onChangeText={(text) => handleChange('confirmPassword', text)}
+                    textContentType="password"
+                    autoComplete="password"
+                />
+
+
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleRegister}
+                    disabled={loading}
+                >
+                    <Text style={styles.buttonText}>{loading ? 'A carregar...' : 'Registar'}</Text>
                 </TouchableOpacity>
-            </View>
-            <TextInput
-                style={styles.input}
-                placeholder="Confirmar Password"
-                placeholderTextColor={theme.text}
-                secureTextEntry
-                value={formData.confirmPassword}
-                onChangeText={(text) => handleChange('confirmPassword', text)}
-            />
 
-            <TouchableOpacity
-                style={styles.button}
-                onPress={handleRegister}
-                disabled={loading}
-            >
-                <Text style={styles.buttonText}>{loading ? 'A carregar...' : 'Registar'}</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={() => navigation.replace('Login')}>
-                <Text style={styles.link}>Já tens conta? Entra</Text>
-            </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.replace('Login')}>
+                    <Text style={styles.link}>Já tens conta? Entra</Text>
+                </TouchableOpacity>
+            </ScrollView>
         </View>
     );
 }
@@ -162,6 +182,7 @@ const getStyles = (theme) => StyleSheet.create({
         marginBottom: spacing.lg,
         color: theme.primary,
         textAlign: 'center',
+        marginTop: 80,
     },
     input: {
         backgroundColor: theme.surface,
@@ -170,6 +191,10 @@ const getStyles = (theme) => StyleSheet.create({
         marginBottom: spacing.md,
         borderWidth: 1,
         borderColor: theme.primary,
+    },
+    scrollContent: {
+        padding: spacing.md,
+        paddingBottom: 40,
     },
     button: {
         backgroundColor: theme.primary,
