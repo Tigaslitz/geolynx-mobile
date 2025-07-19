@@ -83,10 +83,7 @@ export default function ProfileScreen({navigation}) {
                     style: "destructive",
                     onPress: () => {
                         logout();
-                        navigation.reset({
-                            index: 0,
-                            routes: [{ name: 'LoginScreen' }],
-                        });
+                        navigation.reset('LoginScreen');
                     }
                 }
             ]
