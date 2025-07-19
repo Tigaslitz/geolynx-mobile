@@ -123,9 +123,9 @@ export default function Home({navigation}) {
                 <Text style={styles.sectionTitle}>Ações Rápidas</Text>
                 <View style={styles.actionsRow}>
                     <QuickActionCard
-                        title="Nova Ficha de Obra"
+                        title="Nova Operação"
                         iconName="add"
-                        path="WorksheetCreate"
+                        path="ExecutionSheets"
                     />
                     <QuickActionCard
                         title="Minhas Fichas"

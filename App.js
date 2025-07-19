@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {AuthProvider, useAuth} from './src/contexts/AuthContext';
 import {UserProvider} from "./src/contexts/UserContext";
 import { WorkSheetProvider } from './src/contexts/WorkSheetContext';
+import {ExecutionSheetProvider} from "./src/contexts/ExecutionSheetContext";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -26,6 +27,10 @@ import NotFound from './src/screens/NotFoundScreen';
 import WorkSheetList from "./src/screens/WorkSheetListScreen";
 import WorkSheet from "./src/screens/WorkSheetScreen";
 import OperationsScreen from './src/screens/OperationsScreen';
+import ExecutionSheetsScreen from './src/screens/ExecutionSheetsScreen';
+import ExecutionSheetDetailScreen from "./src/screens/ExecutionSheetDetailScreen";
+import ExecutionOperationScreen from "./src/screens/ExecutionOperationScreen";
+import PolygonOperationScreen from "./src/screens/PolygonOperationScreen";
 import SettingsScreen from "./src/screens/SettingsScreen";
 import UserManualScreen from "./src/screens/UserManualScreen";
 
@@ -37,9 +42,11 @@ export default function App() {
             <UserProvider>
                 <AuthProvider>
                     <WorkSheetProvider>
-                        <NavigationContainer>
-                            <AppNavigator />
-                        </NavigationContainer>
+                        <ExecutionSheetProvider>
+                            <NavigationContainer>
+                                <AppNavigator />
+                            </NavigationContainer>
+                        </ExecutionSheetProvider>
                     </WorkSheetProvider>
                 </AuthProvider>
             </UserProvider>
@@ -73,6 +80,11 @@ function AppNavigator() {
                     <Stack.Screen name="WorksheetUpdate" component={WorksheetUpdate} />
                     <Stack.Screen name="WorkSheetList" component={WorkSheetList} />
                     <Stack.Screen name="WorkSheet" component={WorkSheet} />
+                    <Stack.Screen name="Operations" component={OperationsScreen} />
+                    <Stack.Screen name="ExecutionSheets" component={ExecutionSheetsScreen} />
+                    <Stack.Screen name="ExecutionSheetDetail" component={ExecutionSheetDetailScreen} />
+                    <Stack.Screen name="ExecutionOperation" component={ExecutionOperationScreen}/>
+                    <Stack.Screen name="PolygonOperation" component={PolygonOperationScreen}/>
                     <Stack.Screen name="OperationsScreen" component={OperationsScreen} />
                     <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
                     <Stack.Screen name="UserManualScreen" component={UserManualScreen}/>

@@ -74,7 +74,7 @@ export default function WorkSheetScreen({ route, navigation }) {
     };
 
     const handleOpenOperations = () => {
-        navigation.navigate('OperationsScreen', {
+        navigation.navigate('Operations', {
             operations: form.operations || [],
         });
     };
