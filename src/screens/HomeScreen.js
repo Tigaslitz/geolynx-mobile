@@ -70,16 +70,48 @@ export default function Home({navigation}) {
         );
     };
 
+    const PrettyUpName = (fullName, theme) => {
+        if (!fullName || typeof fullName !== 'string') return null;
+
+        const nameSet = fullName.trim().split(/\s+/); // handle multiple spaces
+        const primaryStyle = { fontWeight: 'bold', color: theme.primary };
+        const secondaryStyle = { fontWeight: 'bold', color: theme.secondary };
+
+        if (nameSet.length >= 2) {
+            const [firstWord, ...restWords] = nameSet;
+            return (
+                <Text>
+                    <Text style={primaryStyle}>{firstWord} </Text>
+                    <Text style={secondaryStyle}>{restWords.join(' ')}</Text>
+                </Text>
+            );
+        } else {
+            const word = nameSet[0];
+            const mid = Math.floor(word.length / 2);
+            const firstHalf = word.slice(0, mid);
+            const secondHalf = word.slice(mid);
+
+            return (
+                <Text>
+                    <Text style={primaryStyle}>{firstHalf}</Text>
+                    <Text style={secondaryStyle}>{secondHalf}</Text>
+                </Text>
+            );
+        }
+    };
+
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.header}>
                 <Text
                     style={styles.welcome}
-                    numberOfLines={1}
+                    numberOfLines={3}
                     ellipsizeMode="tail"
                 >
-                    Bem‑vindo, {user.fullName}!
+                    <Text>Bem-vindo,{"\n"}</Text>
+                    {PrettyUpName(user.fullName, theme)}
                 </Text>
+
                 <TouchableOpacity
                     style={styles.profileButton}
                     onPress={() => navigation.navigate('Profile')}
@@ -146,6 +178,7 @@ const getStyles = (theme) => StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        marginTop: spacing.md,
         marginBottom: spacing.lg,
         paddingHorizontal: spacing.md,
     },
