@@ -201,13 +201,6 @@ const getStyles = (theme) => StyleSheet.create({
         paddingLeft: 20,
         flexShrink: 1,
     },
-    profileButton: {
-        padding: 4,
-        borderRadius: 40,
-        borderWidth: 2,
-        borderColor: theme.white,
-        backgroundColor: theme.infoBackground,
-    },
     statsRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -273,6 +266,13 @@ const getStyles = (theme) => StyleSheet.create({
         padding: 2,
         borderRadius: 100,
         backgroundColor: theme.primary,
+    },
+    profileButton2: {
+        padding: 4,
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: theme.white,
+        backgroundColor: theme.infoBackground,
     },
     profileImage: {
         width: 50,

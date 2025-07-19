@@ -78,7 +78,7 @@ export const UserProvider = ({ children }) => {
             const payload = {
                 identificador: user.email,
             };
-            //const response = await api.post('/user/remove', payload);
+            const response = await api.post('/user/remove', payload);
 
             return { success: true, data: refreshedUser };
         } catch (error) {

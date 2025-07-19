@@ -92,7 +92,7 @@ export default function AccountManagement() {
             <View style={styles.infoBlock}>
                 <Text style={styles.label}>Email</Text>
                 <Text style={styles.staticText}>{user.email}</Text>
-
+                <View style={{ height: 5 }} />
                 <Text style={styles.label}>Função</Text>
                 <Text style={styles.staticText}>{user.role}</Text>
             </View>
@@ -165,6 +165,7 @@ const getStyles = (theme) =>
             fontWeight: '700',
             color: theme.primary,
             marginBottom: spacing.lg,
+            marginTop:50,
             textAlign: 'center',
         },
         inputBlock: {
@@ -173,11 +174,12 @@ const getStyles = (theme) =>
         infoBlock: {
             marginBottom: spacing.lg,
             backgroundColor: theme.surface,
-            padding: spacing.md,
+            padding: 10,
             borderRadius: 8,
         },
         label: {
-            fontWeight: '500',
+            fontWeight: 'bold',
+            fontSize:15,
             color: theme.text,
             marginBottom: 4,
         },

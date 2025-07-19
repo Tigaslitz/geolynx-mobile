@@ -113,17 +113,48 @@ export default function ProfileScreen({navigation}) {
         );
     };
 
+    const PrettyUpName = (fullName, theme) => {
+        if (!fullName || typeof fullName !== 'string') return null;
+
+        const nameSet = fullName.trim().split(/\s+/); // handle multiple spaces
+        const primaryStyle = { fontWeight: 'bold', color: theme.primary };
+        const secondaryStyle = { fontWeight: 'bold', color: theme.secondary };
+
+        if (nameSet.length >= 2) {
+            const [firstWord, ...restWords] = nameSet;
+            return (
+                <Text>
+                    <Text style={primaryStyle}>{firstWord} </Text>
+                    <Text style={secondaryStyle}>{restWords.join(' ')}</Text>
+                </Text>
+            );
+        } else {
+            const word = nameSet[0];
+            const mid = Math.floor(word.length / 2);
+            const firstHalf = word.slice(0, mid);
+            const secondHalf = word.slice(mid);
+
+            return (
+                <Text>
+                    <Text style={primaryStyle}>{firstHalf}</Text>
+                    <Text style={secondaryStyle}>{secondHalf}</Text>
+                </Text>
+            );
+        }
+    };
+
     if (!user) return null; // ou <Loading />
     return (
         <SafeAreaView style={styles.safeArea}>
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-                <Image
-                    style={styles.avatar}
-                    source={{
-                        uri: 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',
-                    }}
-                />
-                <Text style={styles.name}>{user.fullName}</Text>
+                <View style={styles.avatarRing}>
+                    <Image
+                        style={styles.avatar}
+                        //source={{uri: 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y',}}
+                        source={require('../../assets/defaultProfilePic.png')}
+                    />
+                </View>
+                <Text style={styles.name}>{PrettyUpName(user.fullName, theme)}</Text>
                 <Text style={styles.email}>{user.email}</Text>
 
                 <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
@@ -203,13 +234,23 @@ const getStyles = (theme) => StyleSheet.create({
         padding: spacing.md,
     },
 
+    avatarRing: {
+        width: 140,
+        height: 140,
+        borderRadius: 70,
+        borderWidth: 5,
+        borderColor: theme.primary,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 50,
+        marginBottom: spacing.lg,
+    },
+
     avatar: {
         width: 130,
         height: 130,
-        borderRadius: 100,
-        marginBottom: spacing.lg,
+        borderRadius: 65,
         backgroundColor: theme.white,
-        marginTop:50,
     },
 
     name: {
