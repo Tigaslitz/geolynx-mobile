@@ -50,16 +50,25 @@ export default function ExecutionSheetsScreen({ navigation }) {
         <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
             <ScrollView contentContainerStyle={styles.container}>
                 <Text style={[styles.title, { color: theme.primary }]}>Minhas Operações</Text>
-                {assignments.map(sheet => (
-                    <TouchableOpacity
-                        key={sheet.id}
-                        style={[styles.card, { borderColor: theme.primary }]}
-                        onPress={() => navigation.navigate('ExecutionSheetDetail', { sheet })}
-                    >
-                        <Text style={[styles.label, { color: theme.text }]}>Folha: {sheet.id}</Text>
-                        <Text style={[styles.value, { color: theme.text }]}>De {sheet.startingDate} a {sheet.finishingDate}</Text>
-                    </TouchableOpacity>
-                ))}
+
+                {assignments.length === 0 ? (
+                    <Text style={[styles.noAssignmentsText, { color: theme.text || theme.text }]}>
+                        Ainda não tem trabalhos atribuídos
+                    </Text>
+                ) : (
+                    assignments.map(sheet => (
+                        <TouchableOpacity
+                            key={sheet.id}
+                            style={[styles.card, { borderColor: theme.primary }]}
+                            onPress={() => navigation.navigate('ExecutionSheetDetail', { sheet })}
+                        >
+                            <Text style={[styles.label, { color: theme.text }]}>Folha: {sheet.id}</Text>
+                            <Text style={[styles.value, { color: theme.text }]}>
+                                De {sheet.startingDate} a {sheet.finishingDate}
+                            </Text>
+                        </TouchableOpacity>
+                    ))
+                )}
             </ScrollView>
         </SafeAreaView>
     );
@@ -103,4 +112,10 @@ const getStyles = (theme) => StyleSheet.create({
         textAlign: 'center',
         marginTop: spacing.md,
     },
+    noAssignmentsText: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: spacing.md,
+    },
+
 });
