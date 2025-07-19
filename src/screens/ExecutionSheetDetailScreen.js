@@ -72,17 +72,17 @@ export default function ExecutionSheetDetailScreen({route, navigation }) {
                     style={[styles.listButton]}
                     onPress={() => navigation.navigate('ExecutionOperation', { operations })}
                 >
-                    <Text style={styles.buttonText}>Operações ({operations.length})</Text>
+                    <Text style={styles.buttonText}>Mais Detalhes ({operations.length})</Text>
                 </TouchableOpacity>
 
                 {/* Dropdown de Operações por Polígono */}
                 <View style={{marginTop: spacing.md}}>
                     <TouchableOpacity
-                        style={styles.listButton}
+                        style={styles.listButtonPolygon}
                         onPress={() => setDropdownOpen(!dropdownOpen)}
                     >
                         <Text style={styles.buttonText}>
-                            Operações por Polígono ({polygonsOperations.length})
+                            Operações por Polígono ({polygonsOperations.length}) {dropdownOpen ? '▲' : '▼'}
                         </Text>
                     </TouchableOpacity>
                     {dropdownOpen && (
@@ -161,7 +161,14 @@ const getStyles = (theme) =>
         },
         listButton: {
             marginTop: spacing.md,
-            backgroundColor: theme.secondary || '#666',
+            backgroundColor: theme.secondary ,
+            padding: spacing.md,
+            borderRadius: 8,
+            alignItems: 'center',
+        },
+        listButtonPolygon: {
+            marginTop: spacing.md,
+            backgroundColor: theme.primary ,
             padding: spacing.md,
             borderRadius: 8,
             alignItems: 'center',
