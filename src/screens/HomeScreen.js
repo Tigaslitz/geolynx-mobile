@@ -19,11 +19,14 @@ const screenButtons = [
 ];
 
 export default function Home({navigation}) {
-    const {user} = useUser();
+    const {user, listUsers} = useUser();
     const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const [totalUsers, setTotalUsers] = useState(null);
     const [loading, setLoading] = useState(true);
+    const canViewUsers = roleScreens[user.role]?.includes('ListUsers');
+    const canViewSheets = roleScreens[user.role]?.includes('WorkSheetList');
+
 
     useEffect(() => {
         const loadTheme = async () => {
@@ -37,11 +40,17 @@ export default function Home({navigation}) {
 
 
     useEffect(() => {
-        api.get('/users/count')
-            .then(res => setTotalUsers(res.data.count))
-            .catch(() => setTotalUsers('-'))
-            .finally(() => setLoading(false));
-    }, []);
+        const loadUserInfo = async () => {
+            if (!canViewUsers) {
+                setLoading(false);
+                return;
+            }
+            const nUsers = (await listUsers())?.length || 0;
+            setTotalUsers(nUsers);
+            setLoading(false);
+        };
+        loadUserInfo();
+    }, [canViewUsers]);
 
     const StatCard = ({ title, value, iconName, iconColor }) => (
         <View style={styles.statCard}>
@@ -122,25 +131,28 @@ export default function Home({navigation}) {
             </View>
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.statsRow}>
-                    {loading
-                        ? <ActivityIndicator size="large" color={theme.primary}/>
-                        : (
-                            <>
+                    {loading ? (
+                        <ActivityIndicator size="large" color={theme.primary} />
+                    ) : (
+                        <>
+                            {canViewUsers && (
                                 <StatCard
                                     title="Total de Utilizadores"
                                     value={totalUsers}
                                     iconName="people"
                                     iconColor={theme.primary}
                                 />
+                            )}
+                            {canViewSheets && (
                                 <StatCard
                                     title="Folhas de Obra Ativas"
                                     value="12"
                                     iconName="assignment"
                                     iconColor={theme.secondary}
                                 />
-                            </>
-                        )
-                    }
+                            )}
+                        </>
+                    )}
                 </View>
 
                 <Text style={styles.sectionTitle}>Ações Rápidas</Text>
@@ -188,6 +200,13 @@ const getStyles = (theme) => StyleSheet.create({
         paddingLeft: 20,
         flexShrink: 1,
     },
+    profileButton: {
+        padding: 4,
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: theme.white,
+        backgroundColor: theme.infoBackground,
+    },
     statsRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -195,22 +214,26 @@ const getStyles = (theme) => StyleSheet.create({
     },
     statCard: {
         flex: 1,
-        alignItems: 'center',
-        padding: spacing.md,
-        backgroundColor: theme.background,
-        borderRadius: 8,
+        backgroundColor: theme.surface,
+        borderRadius: 16,
+        paddingVertical: spacing.md,
+        paddingHorizontal: spacing.sm,
         marginHorizontal: spacing.xs,
-        elevation: 2,
+        alignItems: 'center',
+        elevation: 3,
     },
     statValue: {
-        fontSize: 22,
-        fontWeight: '700',
+        fontSize: 26,
+        fontWeight: '800',
+        color: theme.primary,
         marginTop: spacing.sm,
-        color: theme.text,
     },
     statTitle: {
-        marginTop: spacing.xs,
+        fontSize: 13,
         color: theme.text,
+        marginTop: 4,
+        textTransform: 'uppercase',
+        letterSpacing: 1,
     },
     sectionTitle: {
         fontSize: 18,
@@ -218,34 +241,31 @@ const getStyles = (theme) => StyleSheet.create({
         marginBottom: spacing.sm,
         color: theme.text,
     },
-    actionsRow: {
-        flexWrap: 'wrap',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-    },
     actionCard: {
-        flex: 1,
-        alignItems: 'center',
-        padding: spacing.md,
+        flexBasis: '48%',
         backgroundColor: theme.primary,
-        borderRadius: 8,
-        marginHorizontal: spacing.xs,
+        borderRadius: 16,
+        paddingVertical: spacing.lg,
+        paddingHorizontal: spacing.sm,
+        marginBottom: spacing.md,
+        alignItems: 'center',
+        elevation: 3,
     },
     actionTitle: {
         marginTop: spacing.sm,
-        color: theme.white,
         fontSize: 14,
+        fontWeight: '600',
+        color: theme.white,
         textAlign: 'center',
+    },
+    actionsRow: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
     },
     safeArea: {
         flex: 1,
         backgroundColor: theme.background,
-    },
-    profileButton: {
-        marginRight: 5,
-        padding: spacing.xs,
-        borderRadius: 100,
-        backgroundColor: theme.text,
     },
     profileImage: {
         width: 50,

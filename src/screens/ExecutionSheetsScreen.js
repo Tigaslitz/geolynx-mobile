@@ -49,10 +49,10 @@ export default function ExecutionSheetsScreen({ navigation }) {
     return (
         <SafeAreaView style={[styles.safeArea, { backgroundColor: theme.background }]}>
             <ScrollView contentContainerStyle={styles.container}>
-                <Text style={[styles.title, { color: theme.primary }]}>Minhas Operações</Text>
+                <Text style={[styles.title]}>Minhas Operações</Text>
 
                 {assignments.length === 0 ? (
-                    <Text style={[styles.noAssignmentsText, { color: theme.text || theme.text }]}>
+                    <Text style={[styles.noAssignmentsText]}>
                         Ainda não tem trabalhos atribuídos
                     </Text>
                 ) : (
@@ -62,8 +62,8 @@ export default function ExecutionSheetsScreen({ navigation }) {
                             style={[styles.card, { borderColor: theme.primary }]}
                             onPress={() => navigation.navigate('ExecutionSheetDetail', { sheet })}
                         >
-                            <Text style={[styles.label, { color: theme.text }]}>Folha: {sheet.id}</Text>
-                            <Text style={[styles.value, { color: theme.text }]}>
+                            <Text style={[styles.label]}>Folha: {sheet.id}</Text>
+                            <Text style={[styles.value]}>
                                 De {sheet.startingDate} a {sheet.finishingDate}
                             </Text>
                         </TouchableOpacity>
@@ -77,9 +77,11 @@ export default function ExecutionSheetsScreen({ navigation }) {
 const getStyles = (theme) => StyleSheet.create({
     safeArea: {
         flex: 1,
+        backgroundColor: theme.background,
     },
     container: {
-        padding: spacing.lg,
+        paddingHorizontal: spacing.lg,
+        paddingBottom: spacing.xl,
     },
     centered: {
         flex: 1,
@@ -87,35 +89,48 @@ const getStyles = (theme) => StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 24,
+        fontSize: 26,
         fontWeight: '700',
+        color: theme.text,
         marginBottom: spacing.lg,
-        textAlign: 'center',
+        textAlign: 'left',
+        borderLeftWidth: 4,
+        borderLeftColor: theme.primary,
+        paddingLeft: spacing.md,
     },
     card: {
-        backgroundColor: theme.background,
-        borderWidth: 1,
-        borderRadius: 8,
-        padding: spacing.md,
+        backgroundColor: theme.card || theme.surface || theme.background,
+        borderRadius: 12,
+        padding: spacing.lg,
         marginBottom: spacing.md,
+        borderLeftWidth: 5,
+        borderLeftColor: theme.primary,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     label: {
-        fontSize: 16,
-        fontWeight: '500',
-        marginBottom: spacing.sm,
+        fontSize: 18,
+        fontWeight: '700',
+        color: theme.primary,
+        marginBottom: spacing.xs,
     },
     value: {
-        fontSize: 14,
+        fontSize: 15,
+        color: theme.text,
     },
     errorText: {
         fontSize: 16,
         textAlign: 'center',
+        color: theme.error,
         marginTop: spacing.md,
     },
     noAssignmentsText: {
         fontSize: 16,
         textAlign: 'center',
-        marginTop: spacing.md,
+        color: theme.text,
+        marginTop: spacing.lg,
     },
-
 });
