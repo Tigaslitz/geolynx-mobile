@@ -14,18 +14,13 @@ import roleScreens from './src/components/roleScreens';
 import Login from './src/screens/LoginScreen';
 import Register from './src/screens/RegisterScreen';
 import Home from './src/screens/HomeScreen';
-import ListUsers from './src/screens/ListUsersScreen';
 import AccountManagement from './src/screens/AccountManagementScreen';
 import Profile from './src/screens/ProfileScreen'
 import AccountRemovalRequests from './src/screens/AccountRemovalRequestsScreen';
 import ChangeAttributes from './src/screens/ChangeAttributesScreen';
-import ChangePassword from './src/screens/ChangePasswordScreen';
-import ChangeRole from './src/screens/ChangeRoleScreen';
-import MapScreen from './src/screens/MapScreen';
 import RequestAccountRemoval from './src/screens/RequestAccountRemovalScreen';
 import WorksheetCreate from './src/screens/WorksheetCreateScreen';
 import WorksheetUpdate from './src/screens/WorksheetUpdateScreen';
-import NotFound from './src/screens/NotFoundScreen';
 import WorkSheetList from "./src/screens/WorkSheetListScreen";
 import WorkSheet from "./src/screens/WorkSheetScreen";
 import OperationsScreen from './src/screens/OperationsScreen';
@@ -74,7 +69,6 @@ function AppNavigator() {
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} />
-                <Stack.Screen name="NotFound" component={NotFound} />
             </Stack.Navigator>
         );
     }
@@ -83,8 +77,8 @@ function AppNavigator() {
     const allowedScreens = user && user.role ? getScreensForRole(user.role) : [];
 
     const screenComponents = {
-        Home, ListUsers, Profile, AccountManagement, AccountRemovalRequests,
-        ChangeAttributes, ChangePassword, ChangeRole, Map: MapScreen, RequestAccountRemoval,
+        Home, Profile, AccountManagement, AccountRemovalRequests,
+        ChangeAttributes, RequestAccountRemoval,
         WorksheetCreate, WorksheetUpdate, WorkSheetList, WorkSheet, Operations: OperationsScreen,
         ExecutionSheets: ExecutionSheetsScreen, ExecutionSheetDetail: ExecutionSheetDetailScreen,
         ExecutionOperation: ExecutionOperationScreen, PolygonOperation: PolygonOperationScreen,
@@ -97,7 +91,6 @@ function AppNavigator() {
                 screenComponents[screenName] &&
                 <Stack.Screen key={screenName} name={screenName} component={screenComponents[screenName]} />
             )}
-            <Stack.Screen name="NotFound" component={NotFound} />
         </Stack.Navigator>
     );
 }
