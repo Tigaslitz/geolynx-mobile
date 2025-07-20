@@ -219,7 +219,7 @@ export default function WorkSheetScreen({ route, navigation }) {
     );
 }
 
-// Função que gera os estilos com base no tema (dark/light)
+
 const getStyles = (theme) => StyleSheet.create({
     safeArea: {
         flex: 1,
@@ -230,52 +230,62 @@ const getStyles = (theme) => StyleSheet.create({
         backgroundColor: theme.background,
     },
     title: {
-        fontSize: 24,
-        fontWeight: '700',
+        fontSize: 30,
+        fontWeight: '800',
         color: theme.primary,
         marginBottom: spacing.lg,
         textAlign: 'center',
+        letterSpacing: 1,
+        textTransform: 'uppercase',
     },
     inputBlock: {
         marginBottom: spacing.md,
     },
     label: {
+        fontSize: 14,
         fontWeight: '500',
         color: theme.text,
-        marginBottom: 4,
+        marginBottom: 6,
     },
     input: {
         backgroundColor: theme.surface,
-        borderColor: theme.primary,
+        borderColor: theme.border || theme.primary,
         borderWidth: 1,
-        borderRadius: 8,
+        borderRadius: 12,
         paddingHorizontal: spacing.md,
         paddingVertical: spacing.sm,
         fontSize: 16,
         color: theme.text,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+        elevation: 1,
     },
     readOnly: {
         backgroundColor: theme.background,
         color: theme.text,
+        opacity: 0.8,
     },
     button: {
         marginTop: spacing.lg,
         backgroundColor: theme.primary,
         padding: spacing.md,
-        borderRadius: 8,
+        borderRadius: 12,
         alignItems: 'center',
-        elevation: 2, // Sombra para Android
-        shadowColor: '#000', // Sombra para iOS
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+        elevation: 3,
     },
     operationsButton: {
         marginTop: spacing.md,
         backgroundColor: theme.secondary || '#6c757d',
         padding: spacing.md,
-        borderRadius: 8,
+        borderRadius: 12,
         alignItems: 'center',
+        elevation: 2,
     },
     disabledButton: {
         opacity: 0.5,
@@ -284,15 +294,21 @@ const getStyles = (theme) => StyleSheet.create({
         color: theme.white || '#FFFFFF',
         fontSize: 16,
         fontWeight: '600',
+        letterSpacing: 0.3,
     },
-    // Estilos para o mapa
     mapContainer: {
         marginTop: spacing.lg,
         marginBottom: spacing.md,
         borderWidth: 1,
         borderColor: theme.border,
-        borderRadius: 8,
-        overflow: 'hidden', // Garante que o mapa respeite as bordas arredondadas
+        borderRadius: 16,
+        overflow: 'hidden',
+        backgroundColor: theme.surface,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
     },
     mapTitle: {
         fontSize: 18,
@@ -300,9 +316,12 @@ const getStyles = (theme) => StyleSheet.create({
         color: theme.text,
         padding: spacing.md,
         backgroundColor: theme.surface,
+        borderBottomWidth: 1,
+        borderBottomColor: theme.border,
     },
     map: {
         width: '100%',
-        height: Dimensions.get('window').width * 0.8, // Altura do mapa responsiva
+        height: Dimensions.get('window').width * 0.8,
     },
 });
+

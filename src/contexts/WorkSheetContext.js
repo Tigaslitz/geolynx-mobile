@@ -19,6 +19,7 @@ export const WorkSheetProvider = ({ children }) => {
         try {
             const response = await api.get('/work-sheet/');
             setWorkSheets(response.data);
+            return response.data;
         } catch (error) {
             console.error('Erro ao buscar folhas de obra:', error);
         } finally {

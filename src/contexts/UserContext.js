@@ -25,12 +25,121 @@ export const UserProvider = ({ children }) => {
             setLoading(false);
         }
     };
+    const getUserById = async (userId) => {
+        try {
+            const response = await api.get(`/user/${userId}`);
+            return response.data;
+        } catch (error) {
+            console.error('Utilizador não encontrado:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const listUsers = async () => {
         try {
             const response = await api.get('/user/all');
             return response.data;
         }catch (error) {
             console.error('Erro ao listar utilizadores:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const listActiveUsers = async () => {
+        try {
+            const response = await api.get('/user/list-accs/active');
+            return response.data;
+        }catch (error) {
+            console.error('Erro ao listar utilizadores:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    const removeUser = async (id) => {
+        try {
+            const payload = {
+                identificador: id,
+            };
+            const response = await api.post('/user/remove',payload);
+            return response.data;
+        }catch (error) {
+            console.error('Erro ao listar utilizadores:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+
+    const getAccountsForRemoval = async () => {
+        try {
+            const response = await api.post('/user/accounts-for-removal');
+            return response.data;
+        }catch (error) {
+            console.error('Erro ao listar utilizadores:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    const getAccountStatus = async (id) => {
+        try {
+            const payload = {
+                identificador: id,
+            };
+            const response = await api.post('/user/account-status', payload);
+            return response.data;
+        }catch (error) {
+            console.error('Erro ao obter estado do utilizador:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    const activateAccount = async (id) => {
+        try {
+            const payload = {
+                identificador: id,
+            };
+            return await api.post('/user/activate',payload);
+        }catch (error) {
+            console.error('Erro ao ativar utilizador:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    const deactivateAccount = async (id) => {
+        try {
+            const payload = {
+                identificador: id,
+            };
+            return await api.post('/user/deactivate',payload);
+            console.log("pimple ", response.data);
+        }catch (error) {
+            console.error('Erro ao desativar utilizador:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    const suspendAccount = async (id) => {
+        try {
+            const payload = {
+                identificador: id,
+            };
+            return await api.post('/user/suspend',payload);
+        }catch (error) {
+            console.error('Erro ao suspender utilizador:', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+    const requestAccountRemoval = async (id) => {
+        try {
+            const payload = {
+                identificador: id,
+            };
+            return await api.post('/user/request-removal',payload);
+        }catch (error) {
+            console.error('Erro ao pedir remoção de conta do utilizador:', error);
         } finally {
             setLoading(false);
         }
@@ -98,8 +207,17 @@ export const UserProvider = ({ children }) => {
         user,
         setUser,
         loading,
+        getUserById,
+        removeUser,
+        getAccountStatus,
+        activateAccount,
+        deactivateAccount,
+        suspendAccount,
+        requestAccountRemoval,
         getUser,
+        getAccountsForRemoval,
         updateUser,
+        listActiveUsers,
         deleteUser,
         hasRole,
         hasPermission,

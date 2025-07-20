@@ -35,6 +35,8 @@ import ExecutionOperationScreen from "./src/screens/ExecutionOperationScreen";
 import PolygonOperationScreen from "./src/screens/PolygonOperationScreen";
 import SettingsScreen from "./src/screens/SettingsScreen";
 import UserManualScreen from "./src/screens/UserManualScreen";
+import AdminDashboard from "./src/screens/AdminDashboardScreen"
+import AdminAccountManagement from "./src/screens/AdminAccountManagementScreen"
 
 // 3. Função para filtrar screens
 function getScreensForRole(role) {
@@ -86,7 +88,7 @@ function AppNavigator() {
         WorksheetCreate, WorksheetUpdate, WorkSheetList, WorkSheet, Operations: OperationsScreen,
         ExecutionSheets: ExecutionSheetsScreen, ExecutionSheetDetail: ExecutionSheetDetailScreen,
         ExecutionOperation: ExecutionOperationScreen, PolygonOperation: PolygonOperationScreen,
-        SettingsScreen, UserManualScreen
+        SettingsScreen, UserManualScreen, AdminDashboard,AdminAccountManagement
     };
 
     return (

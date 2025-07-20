@@ -1,13 +1,13 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useWorkSheets } from '../contexts/WorkSheetContext';
-import { theme, spacing } from '../theme';
-import {SafeAreaView} from "react-native-safe-area-context";
-import {getTheme} from "../services/GeneralFunctions";
-import {darkmode, lightmode} from "../theme/colors";
+import { spacing } from '../theme';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { getTheme } from "../services/GeneralFunctions";
+import { darkmode, lightmode } from "../theme/colors";
 
 export default function WorkSheetList({ navigation }) {
-    const { worksheets,fetchWorkSheets, loading } = useWorkSheets();
+    const { worksheets, fetchWorkSheets, loading } = useWorkSheets();
     const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
 
@@ -20,10 +20,7 @@ export default function WorkSheetList({ navigation }) {
     }, []);
 
     useEffect(() => {
-        const loadWorkSheets = async () => {
-            await fetchWorkSheets();
-        };
-        loadWorkSheets();
+        fetchWorkSheets();
     }, []);
 
     if (loading) {
@@ -38,15 +35,19 @@ export default function WorkSheetList({ navigation }) {
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <Text style={styles.title}>Minhas Fichas</Text>
-                <ScrollView vertical contentContainerStyle={styles.scrollContainer} showsHorizontalScrollIndicator={false}>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
                     {worksheets.map((sheet) => (
                         <TouchableOpacity
                             key={sheet.id}
                             style={styles.card}
                             onPress={() => navigation.navigate('WorkSheet', { id: sheet.id })}
                         >
-                            <Text style={styles.cardTitle}>{sheet.aigp || `Ficha ${sheet.aigp}`}</Text>
-                            <Text style={styles.cardDate}>{new Date(sheet.awardDate).toLocaleDateString()}</Text>
+                            <Text style={styles.cardTitle}>
+                                {sheet.aigp || `Ficha ${sheet.id}`}
+                            </Text>
+                            <Text style={styles.cardDate}>
+                                {new Date(sheet.awardDate).toLocaleDateString()}
+                            </Text>
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
@@ -56,53 +57,52 @@ export default function WorkSheetList({ navigation }) {
 }
 
 const getStyles = (theme) => StyleSheet.create({
-    container: {
+    safeArea: {
         flex: 1,
         backgroundColor: theme.background,
-        padding: spacing.md,
+    },
+    container: {
+        flex: 1,
+        padding: spacing.lg,
     },
     title: {
+        fontSize: 28,
+        fontWeight: '800',
         color: theme.primary,
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        alignSelf: 'center',
+        textAlign: 'center',
+        marginBottom: spacing.lg,
     },
     scrollContainer: {
-        paddingHorizontal: 10,
+        paddingBottom: spacing.lg,
     },
     card: {
         backgroundColor: theme.surface,
-        padding: spacing.md,
-        borderRadius: 8,
+        padding: spacing.lg,
+        borderRadius: 16,
         borderWidth: 1,
         borderColor: theme.primary,
-        marginRight: spacing.md,
         marginBottom: spacing.md,
+        elevation: 4,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.15,
         shadowRadius: 4,
-        elevation: 2,
     },
     cardTitle: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: theme.text,
-        marginBottom: spacing.xs,
+        fontSize: 18,
+        fontWeight: '700',
+        color: theme.primary,
+        marginBottom: 4,
     },
     cardDate: {
         fontSize: 14,
         color: theme.text,
+        opacity: 0.7,
     },
     loaderContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: theme.background,
-    },
-    safeArea: {
-        flex: 1,
         backgroundColor: theme.background,
     },
 });

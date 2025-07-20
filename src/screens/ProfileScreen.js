@@ -43,7 +43,7 @@ export default function ProfileScreen({navigation}) {
         return (
             <View style={styles.loadingContainer}>
                 <Image
-                    source={require('../../assets/Logo_GeoLynx.png')}
+                    source={require('../../assets/Logo_Geolynx.png')}
                     style={styles.loadingImage}
                 />
             </View>
@@ -176,7 +176,7 @@ export default function ProfileScreen({navigation}) {
                     alignItems: 'center',
                 }]}>
                     <Image
-                        source={require('../../assets/Logo_GeoLynx.png')}
+                        source={require('../../assets/Logo_Geolynx.png')}
                         style={styles.previewLogo}
                         resizeMode="contain"
                     />

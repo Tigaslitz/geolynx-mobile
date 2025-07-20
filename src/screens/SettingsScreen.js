@@ -74,7 +74,7 @@ export default function SettingsScreen({navigation}) {
                 alignItems: 'center', // center contents horizontally
             }]}>
                 <Image
-                    source={require('../../assets/Logo_GeoLynx.png')}
+                    source={require('../../assets/Logo_Geolynx.png')}
                     style={styles.previewLogo}
                     resizeMode="contain"
                 />

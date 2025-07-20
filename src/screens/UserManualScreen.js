@@ -31,7 +31,7 @@ export default function UserManualScreen() {
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.content}>
                 <Image
-                    source={require('../../assets/Logo_GeoLynx.png')}
+                    source={require('../../assets/Logo_Geolynx.png')}
                     style={styles.logo}
                     resizeMode="contain"
                 />

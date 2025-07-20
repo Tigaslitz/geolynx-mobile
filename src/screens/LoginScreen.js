@@ -41,7 +41,7 @@ export default function Login({navigation}) {
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
                 <Image
-                    source={require('../../assets/Logo_GeoLynx.png')}
+                    source={require('../../assets/Logo_Geolynx.png')}
                     style={styles.logo}
                     resizeMode="contain"
                 />

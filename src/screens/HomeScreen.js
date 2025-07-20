@@ -10,12 +10,13 @@ import { colors, lightmode, darkmode} from '../theme/colors';
 import api from '../services/api';
 import {useUser} from "../contexts/UserContext";
 import {getTheme} from "../services/GeneralFunctions";
+import AdminDashboard from "./AdminDashboardScreen";
 import * as Location from 'expo-location';
 import MapView, { Marker } from 'react-native-maps';
 import { useMap } from "../contexts/MapContext";
 
 const screenButtons = [
-    { name: 'ListUsers', label: 'Listar Usuários' },
+    { name: 'AdminDashboard', label: 'Listar Usuários' },
     { name: 'ExecutionSheets', label: 'Nova Operação' },
     { name: 'Profile', label: 'Perfil' },
     { name: 'WorkSheetList', label: 'Minhas Fichas' },
@@ -48,6 +49,7 @@ export default function Home({navigation}) {
     const [description, setDescription] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const {animalsSet, historicalCuriositiesSet, fetchAnimalsByGeohash, uploadAnimal, uploadHistoricalCuriosity} = useMap();
+    const canManageUsers = roleScreens[user.role]?.includes('AdminDashboard');
 
 
     useEffect(() => {
@@ -113,8 +115,7 @@ export default function Home({navigation}) {
         </View>
     );
 
-    const QuickActionCard = ({ title, iconName, path, role }) => {
-        const { hasRole } = useUser();
+    const QuickActionCard = ({ title, iconName, path }) => {
         const navigation = useNavigation();
 
         if (!roleScreens[user.role]?.includes(path)) return null;
@@ -618,6 +619,7 @@ export default function Home({navigation}) {
                     onPress={() => navigation.navigate('Profile')}
                 >
                     <Image
+                        //source={require('../../assets/Logo_Geolynx.png')}
                         source={require('../../assets/defaultProfilePic.png')}
                         style={styles.profileImage}
                     />
@@ -722,7 +724,7 @@ export default function Home({navigation}) {
                     <QuickActionCard
                         title="Gerir Utilizadores"
                         iconName="people"
-                        path="ListUsers"
+                        path="AdminDashboard"
                     />
                 </View>
             </ScrollView>

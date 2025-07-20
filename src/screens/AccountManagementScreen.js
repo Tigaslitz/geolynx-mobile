@@ -62,7 +62,6 @@ export default function AccountManagement() {
             .filter(([_, value]) => value && value.trim() !== '')
             .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
 
-        console.log('Payload to update:', payload);
         const result = await updateUser(user, payload);
         Keyboard.dismiss();
 

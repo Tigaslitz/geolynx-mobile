@@ -34,9 +34,7 @@ export const ExecutionSheetProvider = ({ children }) => {
     // Inicia uma atividade e atualiza o contexto em seguida
     const startActivity = async ({ executionSheetId, polygonId, operationId }) => {
         try {
-            console.log("aqui");
             await api.post('/execution-sheet/start-activity', { executionSheetId, polygonId, operationId });
-            console.log("aqui2");
             return { success: true, message: 'Atividade iniciada com sucesso' };
         } catch (error) {
             return {
@@ -49,9 +47,7 @@ export const ExecutionSheetProvider = ({ children }) => {
     // Termina uma atividade e atualiza o contexto em seguida
     const stopActivity = async ({ executionSheetId, polygonId, operationId }) => {
         try {
-            console.log("aqui3");
             await api.post('/execution-sheet/stop-activity', { executionSheetId, polygonId, operationId });
-            console.log("aqui4");
             return { success: true };
         } catch (error) {
             console.error('Erro ao parar atividade:', error);

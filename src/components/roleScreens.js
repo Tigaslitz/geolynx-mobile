@@ -4,7 +4,7 @@ const roleScreens = {
         'ChangeAttributes', 'ChangePassword', 'ChangeRole', 'Map', 'RequestAccountRemoval',
         'WorksheetCreate', 'WorksheetUpdate', 'WorkSheetList', 'WorkSheet', 'Operations',
         'ExecutionSheets', 'ExecutionSheetDetail', 'ExecutionOperation', 'PolygonOperation',
-        'SettingsScreen', 'UserManualScreen'
+        'SettingsScreen', 'UserManualScreen', "AdminDashboard", "AdminAccountManagement"
     ],
     SYSBO: [
         'Home', 'ListUsers', 'Profile', 'AccountManagement', 'AccountRemovalRequests',
