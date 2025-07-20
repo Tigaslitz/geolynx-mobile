@@ -12,36 +12,36 @@ const roleScreens = {
         'WorkSheetList', 'WorkSheet', 'SettingsScreen', 'UserManualScreen'
     ],
     RU: [
-        'Home', 'Profile', 'ChangeAttributes', 'ChangePassword', 'RequestAccountRemoval',
+        'Home', 'Profile', 'ChangeAttributes','AccountManagement', 'ChangePassword', 'RequestAccountRemoval',
         'SettingsScreen', 'UserManualScreen'
     ],
     SMBO: [
-        'Home', 'Profile', 'ChangeAttributes', 'ChangePassword', 'RequestAccountRemoval',
+        'Home', 'Profile', 'ChangeAttributes', 'AccountManagement','ChangePassword', 'RequestAccountRemoval',
         'WorksheetCreate', 'WorksheetUpdate', 'WorkSheetList', 'WorkSheet', 'SettingsScreen', 'UserManualScreen'
     ],
     SGVBO: [
-        'Home', 'Profile', 'ChangeAttributes', 'ChangePassword', 'RequestAccountRemoval',
+        'Home', 'Profile', 'ChangeAttributes','AccountManagement', 'ChangePassword', 'RequestAccountRemoval',
         'WorkSheetList', 'WorkSheet', 'SettingsScreen', 'UserManualScreen'
     ],
     SDVBO: [
-        'Home', 'Profile', 'ChangeAttributes', 'ChangePassword', 'RequestAccountRemoval',
+        'Home', 'Profile', 'ChangeAttributes','AccountManagement', 'ChangePassword', 'RequestAccountRemoval',
         'WorkSheetList', 'WorkSheet', 'ExecutionSheets', 'ExecutionSheetDetail', 'SettingsScreen', 'UserManualScreen'
     ],
     PRBO: [
-        'Home', 'Profile', 'ChangeAttributes', 'ChangePassword', 'RequestAccountRemoval',
+        'Home', 'Profile', 'ChangeAttributes','AccountManagement', 'ChangePassword', 'RequestAccountRemoval',
         'Operations', 'ExecutionSheets', 'ExecutionSheetDetail', 'SettingsScreen', 'UserManualScreen'
     ],
     PO: [
-        'Home', 'Profile', 'AccountManagement', 'RequestAccountRemoval', 'Operations',
+        'Home', 'Profile', 'AccountManagement','AccountManagement', 'RequestAccountRemoval', 'Operations',
         'ExecutionSheets', 'ExecutionSheetDetail', 'ExecutionOperation', 'PolygonOperation',
         'SettingsScreen', 'UserManualScreen'
     ],
     ADLU: [
-        'Home', 'Profile', 'ChangeAttributes', 'ChangePassword', 'RequestAccountRemoval',
+        'Home', 'Profile', 'ChangeAttributes', 'AccountManagement','ChangePassword', 'RequestAccountRemoval',
         'SettingsScreen', 'UserManualScreen'
     ],
     VU: [
-        'Home', 'Profile', 'SettingsScreen', 'UserManualScreen'
+        'Home', 'Profile', 'SettingsScreen', 'AccountManagement','UserManualScreen'
     ],
     SYSTEM: [
         // Se necessário, adicione screens específicas do sistema

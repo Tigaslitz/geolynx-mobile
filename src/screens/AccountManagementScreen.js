@@ -10,13 +10,13 @@ import {
     Keyboard, Platform
 } from 'react-native';
 import { spacing } from '../theme';
-import { colors, lightmode, darkmode} from '../theme/colors';
+import { colors, lightmode, darkmode } from '../theme/colors';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useUser } from '../contexts/UserContext';
-import {getTheme, startupTheme} from "../services/GeneralFunctions";
+import { getTheme, startupTheme } from "../services/GeneralFunctions";
 
 export default function AccountManagement() {
-    const {user, setUser, updateUser} = useUser();
+    const { user, setUser, updateUser } = useUser();
     const [theme, setTheme] = useState(lightmode);
     const styles = getStyles(theme);
     const [showDatePicker, setShowDatePicker] = useState(false);
@@ -29,6 +29,7 @@ export default function AccountManagement() {
         dateOfBirth: '',
         nationality: '',
         residence: '',
+        password: '', // novo campo
     });
 
     useEffect(() => {
@@ -49,18 +50,19 @@ export default function AccountManagement() {
                 dateOfBirth: user.dateOfBirth || '',
                 nationality: user.nationality || '',
                 residence: user.residence || '',
+                password: '', // não preenchemos a password por segurança
             });
         }
     }, [user]);
 
     const handleChange = (field, value) => {
-        setForm((prev) => ({...prev, [field]: value}));
+        setForm((prev) => ({ ...prev, [field]: value }));
     };
 
     const handleSave = async () => {
         const payload = Object.entries(form)
             .filter(([_, value]) => value && value.trim() !== '')
-            .reduce((obj, [key, value]) => ({...obj, [key]: value}), {});
+            .reduce((obj, [key, value]) => ({ ...obj, [key]: value }), {});
 
         const result = await updateUser(user, payload);
         Keyboard.dismiss();
@@ -75,7 +77,6 @@ export default function AccountManagement() {
     const onDateChange = (event, selectedDate) => {
         setShowDatePicker(Platform.OS === 'ios');
         if (selectedDate) {
-            // formata para YYYY-MM-DD
             const yyyy = selectedDate.getFullYear();
             const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
             const dd = String(selectedDate.getDate()).padStart(2, '0');
@@ -96,15 +97,15 @@ export default function AccountManagement() {
                 <Text style={styles.staticText}>{user.role}</Text>
             </View>
 
-            {/* Campos editáveis genéricos (exceto Data de Nascimento) */}
+            {/* Campos editáveis genéricos */}
             {[
-                {label: 'Nome completo', field: 'fullName'},
-                {label: 'Telemóvel', field: 'phonePrimary'},
-                {label: 'Morada', field: 'address'},
-                {label: 'Código Postal', field: 'postalCode'},
-                {label: 'Nacionalidade', field: 'nationality'},
-                {label: 'Residência', field: 'residence'},
-            ].map(({label, field}) => (
+                { label: 'Nome completo', field: 'fullName' },
+                { label: 'Telemóvel', field: 'phonePrimary' },
+                { label: 'Morada', field: 'address' },
+                { label: 'Código Postal', field: 'postalCode' },
+                { label: 'Nacionalidade', field: 'nationality' },
+                { label: 'Residência', field: 'residence' },
+            ].map(({ label, field }) => (
                 <View key={field} style={styles.inputBlock}>
                     <Text style={styles.label}>{label}</Text>
                     <TextInput
@@ -117,19 +118,14 @@ export default function AccountManagement() {
                 </View>
             ))}
 
-            {/* Campo de Data de Nascimento com DateTimePicker */}
+            {/* Campo de Data de Nascimento */}
             <View style={styles.inputBlock}>
                 <Text style={styles.label}>Data de Nascimento</Text>
                 <TouchableOpacity
                     style={styles.input}
                     onPress={() => setShowDatePicker(true)}
                 >
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            color: theme.text,
-                        }}
-                    >
+                    <Text style={{ fontSize: 16, color: theme.text }}>
                         {form.dateOfBirth || 'Seleciona a data'}
                     </Text>
                 </TouchableOpacity>
@@ -144,6 +140,19 @@ export default function AccountManagement() {
                     onChange={onDateChange}
                 />
             )}
+
+            {/* Campo de Password */}
+            <View style={styles.inputBlock}>
+                <Text style={styles.label}>Password</Text>
+                <TextInput
+                    style={styles.input}
+                    value={form.password}
+                    onChangeText={(value) => handleChange('password', value)}
+                    placeholder="Introduz a nova password"
+                    placeholderTextColor={theme.text}
+                    secureTextEntry={true}
+                />
+            </View>
 
             {/* Botão de guardar */}
             <TouchableOpacity style={styles.button} onPress={handleSave}>
@@ -164,7 +173,7 @@ const getStyles = (theme) =>
             fontWeight: '700',
             color: theme.primary,
             marginBottom: spacing.lg,
-            marginTop:50,
+            marginTop: 50,
             textAlign: 'center',
         },
         inputBlock: {
@@ -178,7 +187,7 @@ const getStyles = (theme) =>
         },
         label: {
             fontWeight: 'bold',
-            fontSize:15,
+            fontSize: 15,
             color: theme.text,
             marginBottom: 4,
         },

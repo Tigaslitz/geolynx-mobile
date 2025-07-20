@@ -1,4 +1,3 @@
-// AdminDashboardScreen.js com ajustes visuais finais
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
@@ -9,6 +8,7 @@ import {
   TouchableOpacity,
   BackHandler,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import { useUser } from '../contexts/UserContext';
 import { useWorkSheets } from '../contexts/WorkSheetContext';
@@ -120,7 +120,7 @@ export default function AdminDashboard({ navigation }) {
             <Text style={styles.cardTitle}>{title}</Text>
             <Text style={styles.cardNumber}>{count}</Text>
           </View>
-          <View style={[styles.iconContainer, { backgroundColor: color }]}>
+          <View style={[styles.iconContainer]}>
             <Text style={styles.cardIcon}>{icon}</Text>
           </View>
         </View>
@@ -140,113 +140,113 @@ export default function AdminDashboard({ navigation }) {
   const usersTitle = showAllUsers ? 'Todos os Utilizadores' : 'Utilizadores Recentes';
 
   return (
-      <ScrollView ref={scrollRef} style={styles.container}>
-        <Text style={styles.title}>Dashboard Administrativo</Text>
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme.background, paddingTop:10, paddingBottom:10 }}>
+        <ScrollView ref={scrollRef} style={styles.container}>
+          <Text style={styles.title}>Dashboard Administrativo</Text>
 
-        <View style={styles.cardsRow}>
-          <StatCard
-              title="Total de Utilizadores"
-              count={stats.totalUsers}
-              icon="👥"
-              color="#3b82f6"
-              onPress={() => {
-                setShowAllUsers(true);
-                scrollTo(usersSectionY);
-              }}
-              showButton={true}
-              buttonLabel="Ver Todos"
-          />
-          <StatCard
-              title="Utilizadores Ativos"
-              count={stats.activeUsers}
-              icon="✅"
-              color="#16a34a"
-          />
-          <StatCard
-              title="Pedidos de Remoção"
-              count={stats.pendingRemoval}
-              icon="⚠️"
-              color="#dc2626"
-              onPress={() => navigation.navigate('AccountRemovalRequests')}
-              showButton={true}
-              buttonLabel="Gerir"
-          />
-          <StatCard
-              title="Folhas de Obra"
-              count={stats.totalWorksheets}
-              icon="📄"
-              color="#0ea5e9"
-          />
-        </View>
-
-        <View onLayout={(e) => (usersSectionY.current = e.nativeEvent.layout.y)}>
-          <Text style={styles.sectionTitle}>{usersTitle}</Text>
-          <View style={styles.tableHeader}>
-            <Text style={styles.th}>Nome</Text>
-            <Text style={styles.th}>Email</Text>
-            <Text style={styles.th}>Role</Text>
-            <Text style={styles.th}>Status</Text>
-            <Text style={styles.th}>Ações</Text>
+          <View style={styles.cardsRow}>
+            <StatCard
+                title="Total de Utilizadores"
+                count={stats.totalUsers}
+                color="#3b82f6"
+                onPress={() => {
+                  setShowAllUsers(true);
+                  scrollTo(usersSectionY);
+                }}
+                showButton={true}
+                buttonLabel="Ver Todos"
+            />
+            <StatCard
+                title="Utilizadores Ativos"
+                count={stats.activeUsers}
+                color="#16a34a"
+            />
+            <StatCard
+                title="Pedidos de Remoção"
+                count={stats.pendingRemoval}
+                color="#dc2626"
+                onPress={() => navigation.navigate('AccountRemovalRequests')}
+                showButton={true}
+                buttonLabel="Gerir"
+            />
+            <StatCard
+                title="Folhas de Obra"
+                count={stats.totalWorksheets}
+                color="#0ea5e9"
+            />
           </View>
-          {displayedUsers.map((u) => (
-              <View key={u.id} style={styles.tableRow}>
-                <Text style={styles.td}>{u.personalInfo?.fullName || u.username}</Text>
-                <Text style={styles.td}>{u.email}</Text>
-                <Text style={styles.td}>{u.role}</Text>
-                <Text style={[styles.statusBadge, { backgroundColor: getStatusColor(u.accountStatus) }]}>
-                  {getStatusLabel(u.accountStatus)}
-                </Text>
-                <View style={styles.actionsCell}>
-                  <TouchableOpacity onPress={() => navigation.navigate('AdminAccountManagement', { userId: u.email })}>
-                    <Text style={styles.actionButton}>⚙️</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => navigation.navigate('ChangeAttributes', { userId: u.id })}>
-                    <Text style={styles.actionButton}>✏️</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-          ))}
-          {allUsers.length > 5 && (
-              <TouchableOpacity onPress={() => setShowAllUsers(!showAllUsers)}>
-                <Text style={styles.toggleBtn}>{showAllUsers ? 'Fechar ▲' : 'Ver Todos ▼'}</Text>
-              </TouchableOpacity>
-          )}
-        </View>
 
-        {removalRequests.length > 0 && (
-            <View onLayout={(e) => (removalSectionY.current = e.nativeEvent.layout.y)}>
-              <Text style={styles.sectionTitle}>Pedidos de Remoção Pendentes</Text>
-              <View style={styles.tableHeader}>
-                <Text style={styles.th}>Utilizador</Text>
-                <Text style={styles.th}>Email</Text>
-                <Text style={styles.th}>Role</Text>
-                <Text style={styles.th}>Ações</Text>
-              </View>
-              {(showAllRemovals ? removalRequests : removalRequests.slice(0, 3)).map((r) => (
-                  <View key={r.id} style={styles.tableRow}>
-                    <Text style={styles.td}>{r.personalInfo?.fullName || r.username}</Text>
-                    <Text style={styles.td}>{r.email}</Text>
-                    <Text style={styles.td}>{r.role}</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('AccountRemovalRequests')}>
-                      <Text style={[styles.statusBadge, { backgroundColor: '#dc2626' }]}>Processar</Text>
+          <View onLayout={(e) => (usersSectionY.current = e.nativeEvent.layout.y)}>
+            <Text style={styles.sectionTitle}>{usersTitle}</Text>
+            <View style={styles.tableHeader}>
+              <Text style={styles.th}>Nome</Text>
+              <Text style={styles.th}>Email</Text>
+              <Text style={styles.th}>Role</Text>
+              <Text style={styles.th}>Status</Text>
+              <Text style={styles.th}>Ações</Text>
+            </View>
+            {displayedUsers.map((u) => (
+                <View key={u.id} style={styles.tableRow}>
+                  <Text style={styles.td}>{u.personalInfo?.fullName || u.username}</Text>
+                  <Text style={styles.td}>{u.email}</Text>
+                  <Text style={styles.td}>{u.role}</Text>
+                  <Text style={[styles.statusBadge, { backgroundColor: getStatusColor(u.accountStatus) }]}>
+                    {getStatusLabel(u.accountStatus)}
+                  </Text>
+                  <View style={styles.actionsCell}>
+                    <TouchableOpacity onPress={() => navigation.navigate('AdminAccountManagement', { userId: u.email })}>
+                      <Text style={styles.actionButton}>⚙️</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('ChangeAttributes', { userId: u.id })}>
+                      <Text style={styles.actionButton}>✏️</Text>
                     </TouchableOpacity>
                   </View>
-              ))}
-              {removalRequests.length > 3 && (
-                  <TouchableOpacity onPress={() => setShowAllRemovals(!showAllRemovals)}>
-                    <Text style={styles.toggleBtn}>{showAllRemovals ? 'Fechar ▲' : 'Ver Todos ▼'}</Text>
-                  </TouchableOpacity>
-              )}
-            </View>
-        )}
-      </ScrollView>
+                </View>
+            ))}
+            {allUsers.length > 5 && (
+                <TouchableOpacity onPress={() => setShowAllUsers(!showAllUsers)}>
+                  <Text style={styles.toggleBtn}>{showAllUsers ? 'Fechar ▲' : 'Ver Todos ▼'}</Text>
+                </TouchableOpacity>
+            )}
+          </View>
+
+          {removalRequests.length > 0 && (
+              <View onLayout={(e) => (removalSectionY.current = e.nativeEvent.layout.y)}>
+                <Text style={styles.sectionTitle}>Pedidos de Remoção Pendentes</Text>
+                <View style={styles.tableHeader}>
+                  <Text style={styles.th}>Utilizador</Text>
+                  <Text style={styles.th}>Email</Text>
+                  <Text style={styles.th}>Role</Text>
+                  <Text style={styles.th}>Ações</Text>
+                </View>
+                {(removalRequests.slice(0, 3)).map((r) => (
+                    <View key={r.id} style={styles.tableRow}>
+                      <Text style={styles.td}>{r.personalInfo?.fullName || r.username}</Text>
+                      <Text style={styles.td}>{r.email}</Text>
+                      <Text style={styles.td}>{r.role}</Text>
+                      <TouchableOpacity onPress={() => navigation.navigate('AccountRemovalRequests')}>
+                        <Text style={[styles.statusBadge, { backgroundColor: '#dc2626' }]}>Processar</Text>
+                      </TouchableOpacity>
+                    </View>
+                ))}
+                {(removalRequests.length > 3) && (
+                    <TouchableOpacity onPress={() => setShowAllRemovals(!showAllRemovals)}>
+                      <Text style={styles.toggleBtn}>
+                        {showAllRemovals ? 'Fechar ▲' : 'Ver Todos ▼'}
+                      </Text>
+                    </TouchableOpacity>
+                )}
+              </View>
+          )}
+        </ScrollView>
+      </SafeAreaView>
   );
 }
 
 const getStyles = (theme) => StyleSheet.create({
   container: { flex: 1, padding: spacing.lg, backgroundColor: theme.background },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  title: { fontSize: 24, fontWeight: '700', marginBottom: spacing.md, textAlign: 'center' },
+  title: { fontSize: 24, fontWeight: '700', marginBottom: spacing.md, textAlign: 'center', color:theme.primary },
   cardsRow: { flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between' },
   card: {
     width: '48%',
@@ -258,9 +258,9 @@ const getStyles = (theme) => StyleSheet.create({
     elevation: 2,
   },
   cardContent: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  cardTitle: { fontSize: 14, color: theme.text, marginBottom: 4 },
+  cardTitle: { fontSize: 14, color: theme.text, marginBottom: 4.,  },
   cardNumber: { fontSize: 20, fontWeight: 'bold', color: theme.text },
-  cardIcon: { fontSize: 24, color: '#fff' },
+  cardIcon: { fontSize: 24, color: '#fff', },
   iconContainer: {
     width: 36,
     height: 36,
@@ -277,7 +277,7 @@ const getStyles = (theme) => StyleSheet.create({
     color: theme.primary,
     fontWeight: '600',
   },
-  sectionTitle: { fontSize: 18, fontWeight: '600', marginTop: spacing.lg, marginBottom: spacing.sm },
+  sectionTitle: { fontSize: 18, fontWeight: '600', marginTop: spacing.lg, marginBottom: spacing.sm,color:theme.primary },
   tableHeader: { flexDirection: 'row', paddingVertical: 8, borderBottomWidth: 1, borderColor: '#ccc' },
   tableRow: { flexDirection: 'row', paddingVertical: 12, borderBottomWidth: 1, borderColor: '#eee', alignItems: 'center' },
   th: { flex: 1, fontWeight: '600', fontSize: 12, color: theme.text },
