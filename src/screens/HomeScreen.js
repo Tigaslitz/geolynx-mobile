@@ -736,12 +736,7 @@ const getStyles = (theme) => StyleSheet.create({
     container: {
         padding: spacing.md,
         backgroundColor: theme.background,
-    },
-
-    scroll: {
-        flex: 1,
-        backgroundColor: theme.background,
-        paddingTop: 100, // height of the fixed header
+        paddingTop: 120,
     },
 
     header: {
@@ -755,7 +750,7 @@ const getStyles = (theme) => StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: spacing.md,
-        paddingTop: 60, // ⬅️ Increase this value to move content down
+        paddingTop: 60,
         paddingBottom: spacing.lg,
     },
 

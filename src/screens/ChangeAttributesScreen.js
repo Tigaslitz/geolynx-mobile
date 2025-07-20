@@ -1,3 +1,4 @@
+// ChangeAttributesScreen.js reestilizado com visual moderno
 import React, { useEffect, useState } from 'react';
 import {
     View,
@@ -10,36 +11,26 @@ import {
     StyleSheet,
 } from 'react-native';
 import { userService } from '../services/api';
-import {darkmode, lightmode} from "../theme/colors";
-import {getTheme} from "../services/GeneralFunctions";
-import {useUser} from "../contexts/UserContext";
+import { darkmode, lightmode } from '../theme/colors';
+import { getTheme } from '../services/GeneralFunctions';
+import { useUser } from '../contexts/UserContext';
+import { spacing } from '../theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function ChangeAttributesScreen ({ route, navigation }) {
+export default function ChangeAttributesScreen({ route, navigation }) {
     const { userId } = route.params;
-    const { getUserById, updateUser} = useUser();
+    const { getUserById, updateUser } = useUser();
     const [userFetched, setUserFetched] = useState(null);
     const [formData, setFormData] = useState({
         personalInfo: {
-            fullName: '',
-            nationality: '',
-            residence: '',
-            address: '',
-            postalCode: '',
-            phonePrimary: '',
-            phoneSecondary: '',
-            taxId: '',
-            dateOfBirth: '',
+            fullName: '', nationality: '', residence: '', address: '',
+            postalCode: '', phonePrimary: '', phoneSecondary: '', taxId: '', dateOfBirth: '',
         },
         professionalInfo: {
-            employer: '',
-            jobTitle: '',
-            employerTaxId: '',
+            employer: '', jobTitle: '', employerTaxId: '',
         },
         identificationInfo: {
-            citizenCard: '',
-            citizenCardIssueDate: '',
-            citizenCardValidity: '',
-            citizenCardIssuePlace: '',
+            citizenCard: '', citizenCardIssueDate: '', citizenCardValidity: '', citizenCardIssuePlace: '',
         },
     });
     const [loading, setLoading] = useState(true);
@@ -49,51 +40,38 @@ export default function ChangeAttributesScreen ({ route, navigation }) {
 
     useEffect(() => {
         const loadTheme = async () => {
-            const themeMode = await getTheme();
-            setTheme(themeMode === 'dark' ? darkmode : lightmode);
+            const mode = await getTheme();
+            setTheme(mode === 'dark' ? darkmode : lightmode);
         };
         loadTheme();
     }, []);
-
 
     useEffect(() => {
         const loadUserData = async () => {
             try {
                 const res = await getUserById(userId);
-                console.log(res);
                 setUserFetched(res);
                 setFormData({
                     personalInfo: {
-                        fullName: res.fullName || '',
-                        nationality: res.nationality || '',
-                        residence: res.residence || '',
-                        address: res.address || '',
-                        postalCode: res.postalCode || '',
-                        phonePrimary: res.phonePrimary || '',
-                        phoneSecondary: res.phoneSecondary || '',
-                        taxId: res.taxId || '',
-                        dateOfBirth: res.dateOfBirth || '',
+                        fullName: res.fullName || '', nationality: res.nationality || '', residence: res.residence || '',
+                        address: res.address || '', postalCode: res.postalCode || '',
+                        phonePrimary: res.phonePrimary || '', phoneSecondary: res.phoneSecondary || '',
+                        taxId: res.taxId || '', dateOfBirth: res.dateOfBirth || '',
                     },
                     professionalInfo: {
-                        employer: res.employer || '',
-                        jobTitle: res.jobTitle || '',
-                        employerTaxId: res.employerTaxId || '',
+                        employer: res.employer || '', jobTitle: res.jobTitle || '', employerTaxId: res.employerTaxId || '',
                     },
                     identificationInfo: {
-                        citizenCard: res.citizenCard || '',
-                        citizenCardIssueDate: res.citizenCardIssueDate || '',
-                        citizenCardValidity: res.citizenCardValidity || '',
-                        citizenCardIssuePlace: res.citizenCardIssuePlace || '',
+                        citizenCard: res.citizenCard || '', citizenCardIssueDate: res.citizenCardIssueDate || '',
+                        citizenCardValidity: res.citizenCardValidity || '', citizenCardIssuePlace: res.citizenCardIssuePlace || '',
                     },
                 });
-
             } catch (err) {
                 Alert.alert('Erro', 'Falha ao carregar dados do utilizador.');
             } finally {
                 setLoading(false);
             }
         };
-
         loadUserData();
     }, [userId]);
 
@@ -109,48 +87,27 @@ export default function ChangeAttributesScreen ({ route, navigation }) {
 
     const handleSubmit = async () => {
         setSubmitting(true);
-
         try {
             const allAttributes = {
                 ...formData.personalInfo,
                 ...formData.professionalInfo,
                 ...formData.identificationInfo,
             };
-            console.log("zangado",payload)
             const payload = Object.fromEntries(
                 Object.entries(allAttributes).filter(
                     ([_, value]) => value !== '' && value !== null && value !== undefined
                 )
             );
-            console.log("zangado",payload);
-            await updateUser(userFetched,payload);
-
+            await updateUser(userFetched, payload);
             Alert.alert('Sucesso', 'Atributos atualizados com sucesso!');
             navigation.navigate('AdminDashboard');
         } catch (err) {
-            const errorMsg =
-                err.response?.data?.message || 'Erro ao atualizar atributos';
+            const errorMsg = err.response?.data?.message || 'Erro ao atualizar atributos';
             Alert.alert('Erro', errorMsg);
         } finally {
             setSubmitting(false);
         }
     };
-
-    if (loading) {
-        return (
-            <View style={styles.centered}>
-                <ActivityIndicator size="large" />
-            </View>
-        );
-    }
-
-    if (!userFetched) {
-        return (
-            <View style={styles.centered}>
-                <Text style={styles.errorText}>Utilizador não encontrado.</Text>
-            </View>
-        );
-    }
 
     const renderInput = (label, section, field, keyboardType = 'default') => (
         <View style={styles.inputGroup}>
@@ -161,65 +118,73 @@ export default function ChangeAttributesScreen ({ route, navigation }) {
                 onChangeText={(text) => handleChange(section, field, text)}
                 editable={!submitting}
                 keyboardType={keyboardType}
+                placeholder="..."
+                placeholderTextColor="#999"
             />
         </View>
     );
 
+    if (loading) {
+        return <View style={styles.centered}><ActivityIndicator size="large" color={theme.primary} /></View>;
+    }
+
+    if (!userFetched) {
+        return <View style={styles.centered}><Text style={styles.errorText}>Utilizador não encontrado.</Text></View>;
+    }
+
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Alterar Atributos do Utilizador</Text>
-            <Text style={styles.subtitle}>
-                {userFetched.username} ({userFetched.email})
-            </Text>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Text style={styles.title}>Alterar Atributos</Text>
+                <Text style={styles.subtitle}>{userFetched.username} ({userFetched.email})</Text>
 
-            <Text style={styles.sectionTitle}>Informações Pessoais</Text>
-            {renderInput('Nome Completo', 'personalInfo', 'fullName')}
-            {renderInput('Nacionalidade', 'personalInfo', 'nationality')}
-            {renderInput('Morada', 'personalInfo', 'address')}
-            {renderInput('Código Postal', 'personalInfo', 'postalCode')}
-            {renderInput('Telefone Principal', 'personalInfo', 'phonePrimary', 'phone-pad')}
-            {renderInput('Telefone Secundário', 'personalInfo', 'phoneSecondary', 'phone-pad')}
-            {renderInput('NIF', 'personalInfo', 'taxId')}
-            {renderInput('Data de Nascimento', 'personalInfo', 'dateOfBirth')}
-            {renderInput('Localidade', 'personalInfo', 'residence')}
+                <Text style={styles.sectionTitle}>Informações Pessoais</Text>
+                {renderInput('Nome Completo', 'personalInfo', 'fullName')}
+                {renderInput('Nacionalidade', 'personalInfo', 'nationality')}
+                {renderInput('Localidade', 'personalInfo', 'residence')}
+                {renderInput('Morada', 'personalInfo', 'address')}
+                {renderInput('Código Postal', 'personalInfo', 'postalCode')}
+                {renderInput('Telefone Principal', 'personalInfo', 'phonePrimary', 'phone-pad')}
+                {renderInput('Telefone Secundário', 'personalInfo', 'phoneSecondary', 'phone-pad')}
+                {renderInput('NIF', 'personalInfo', 'taxId')}
+                {renderInput('Data de Nascimento', 'personalInfo', 'dateOfBirth')}
 
-            <Text style={styles.sectionTitle}>Informações Profissionais</Text>
-            {renderInput('Organização', 'professionalInfo', 'employer')}
-            {renderInput('Cargo', 'professionalInfo', 'jobTitle')}
-            {renderInput('NIF da Organização', 'professionalInfo', 'employerTaxId')}
+                <Text style={styles.sectionTitle}>Informações Profissionais</Text>
+                {renderInput('Organização', 'professionalInfo', 'employer')}
+                {renderInput('Cargo', 'professionalInfo', 'jobTitle')}
+                {renderInput('NIF da Organização', 'professionalInfo', 'employerTaxId')}
 
-            <Text style={styles.sectionTitle}>Informações de Identificação</Text>
-            {renderInput('Cartão de Cidadão', 'identificationInfo', 'citizenCard')}
-            {renderInput('Data de Emissão', 'identificationInfo', 'citizenCardIssueDate')}
-            {renderInput('Validade', 'identificationInfo', 'citizenCardValidity')}
-            {renderInput('Local de Emissão', 'identificationInfo', 'citizenCardIssuePlace')}
+                <Text style={styles.sectionTitle}>Identificação</Text>
+                {renderInput('Cartão de Cidadão', 'identificationInfo', 'citizenCard')}
+                {renderInput('Data de Emissão', 'identificationInfo', 'citizenCardIssueDate')}
+                {renderInput('Validade', 'identificationInfo', 'citizenCardValidity')}
+                {renderInput('Local de Emissão', 'identificationInfo', 'citizenCardIssuePlace')}
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={[styles.button, styles.primaryButton]}
-                    onPress={handleSubmit}
-                    disabled={submitting}
-                >
-                    <Text style={styles.buttonText}>
-                        {submitting ? 'A atualizar...' : 'Atualizar'}
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={[styles.button, styles.cancelButton]}
-                    onPress={() => navigation.navigate('AdminDashboard')}
-                    disabled={submitting}
-                >
-                    <Text style={[styles.buttonText, styles.cancelButtonText]}>Cancelar</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        style={[styles.button, styles.primaryButton]}
+                        onPress={handleSubmit}
+                        disabled={submitting}
+                    >
+                        <Text style={styles.buttonText}>{submitting ? 'A atualizar...' : 'Atualizar'}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={[styles.button, styles.cancelButton]}
+                        onPress={() => navigation.navigate('AdminDashboard')}
+                        disabled={submitting}
+                    >
+                        <Text style={[styles.buttonText, styles.cancelText]}>Cancelar</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </SafeAreaView>
     );
-};
+}
 
 const getStyles = (theme) => StyleSheet.create({
     container: {
-        padding: 20,
-        paddingBottom: 40,
+        padding: spacing.lg,
+        paddingBottom: spacing.xl,
     },
     centered: {
         flex: 1,
@@ -227,64 +192,67 @@ const getStyles = (theme) => StyleSheet.create({
         alignItems: 'center',
     },
     title: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginBottom: 4,
+        fontSize: 24,
+        fontWeight: '700',
+        color: theme.primary,
         textAlign: 'center',
+        marginBottom: spacing.sm,
     },
     subtitle: {
-        fontSize: 16,
-        color: '#555',
-        marginBottom: 16,
+        fontSize: 14,
+        color: theme.text,
         textAlign: 'center',
+        marginBottom: spacing.md,
     },
     sectionTitle: {
         fontSize: 18,
         fontWeight: '600',
-        marginTop: 24,
-        marginBottom: 8,
+        color: theme.primary,
+        marginTop: spacing.lg,
+        marginBottom: spacing.sm,
     },
     inputGroup: {
-        marginBottom: 12,
+        marginBottom: spacing.md,
     },
     label: {
         fontSize: 14,
         marginBottom: 4,
-        color: '#333',
+        color: theme.text,
     },
     input: {
         borderWidth: 1,
         borderColor: '#ccc',
         borderRadius: 8,
-        padding: 10,
+        padding: spacing.sm,
         fontSize: 16,
-        backgroundColor: '#fff',
+        backgroundColor: theme.surface,
+        color: theme.text,
     },
     buttonContainer: {
         flexDirection: 'row',
+        marginTop: spacing.lg,
         gap: 10,
-        marginTop: 24,
     },
     button: {
         flex: 1,
-        paddingVertical: 14,
-        borderRadius: 8,
+        paddingVertical: spacing.md,
+        borderRadius: 10,
         alignItems: 'center',
     },
     primaryButton: {
-        backgroundColor: '#3b82f6',
+        backgroundColor: theme.primary,
     },
     cancelButton: {
         borderWidth: 1,
-        borderColor: '#3b82f6',
+        borderColor: theme.primary,
     },
     buttonText: {
         fontSize: 16,
-        fontWeight: '500',
+        fontWeight: '600',
         color: '#fff',
     },
-    cancelButtonText: {
-        color: '#3b82f6',
+    cancelText: {
+        color: theme.primary,
     },
     errorText: {
         fontSize: 16,

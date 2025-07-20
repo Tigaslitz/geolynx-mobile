@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -7,16 +7,25 @@ import {
     ActivityIndicator,
     Alert,
     TouchableOpacity,
-    BackHandler
+    BackHandler,
 } from 'react-native';
 import { useUser } from '../contexts/UserContext';
-import {darkmode, lightmode} from "../theme/colors";
-import {getTheme} from "../services/GeneralFunctions";
-import {useFocusEffect} from "@react-navigation/native";
+import { darkmode, lightmode } from '../theme/colors';
+import { getTheme } from '../services/GeneralFunctions';
+import { useFocusEffect } from '@react-navigation/native';
+import { spacing } from '../theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AdminAccountManagement({ route, navigation }) {
     const { userId } = route.params;
-    const { getAccountStatus, activateAccount, deactivateAccount, suspendAccount, requestAccountRemoval } = useUser();
+    const {
+        getAccountStatus,
+        activateAccount,
+        deactivateAccount,
+        suspendAccount,
+        requestAccountRemoval,
+    } = useUser();
+
     const [status, setStatus] = useState(null);
     const [loading, setLoading] = useState(true);
     const [processing, setProcessing] = useState(false);
@@ -32,12 +41,11 @@ export default function AdminAccountManagement({ route, navigation }) {
         fetchStatus();
     }, []);
 
-
     useFocusEffect(
         useCallback(() => {
             const onBackPress = () => {
                 navigation.navigate('AdminDashboard');
-                return true; // bloqueia o comportamento padrão
+                return true;
             };
             const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
             return () => subscription.remove();
@@ -56,40 +64,32 @@ export default function AdminAccountManagement({ route, navigation }) {
         }
     };
 
-    const handleAction = async (action) => {
-        Alert.alert(
-            'Confirmar Ação',
-            getDialogMessage(action),
-            [
-                { text: 'Cancelar', style: 'cancel' },
-                {
-                    text: 'Confirmar',
-                    onPress: () => executeAction(action),
-                },
-            ]
-        );
+    const handleAction = (action) => {
+        Alert.alert('Confirmar Ação', getDialogMessage(action), [
+            { text: 'Cancelar', style: 'cancel' },
+            { text: 'Confirmar', onPress: () => executeAction(action) },
+        ]);
     };
 
     const executeAction = async (action) => {
         setProcessing(true);
         try {
-            const data = userId;
             switch (action) {
                 case 'activate':
-                    await activateAccount(data);
+                    await activateAccount(userId);
                     break;
                 case 'deactivate':
-                    await deactivateAccount(data);
+                    await deactivateAccount(userId);
                     break;
                 case 'suspend':
-                    await suspendAccount(data);
+                    await suspendAccount(userId);
                     break;
                 case 'requestRemoval':
-                    await requestAccountRemoval(data);
+                    await requestAccountRemoval(userId);
                     break;
             }
             await fetchStatus();
-        } catch (error) {
+        } catch {
             Alert.alert('Erro', 'Ação falhou.');
         } finally {
             setProcessing(false);
@@ -97,27 +97,22 @@ export default function AdminAccountManagement({ route, navigation }) {
     };
 
     const getDialogMessage = (action) => {
-        switch (action) {
-            case 'activate':
-                return 'Deseja ativar esta conta?';
-            case 'deactivate':
-                return 'Deseja desativar esta conta?';
-            case 'suspend':
-                return 'Deseja suspender esta conta?';
-            case 'requestRemoval':
-                return 'Deseja marcar esta conta para remoção?';
-            default:
-                return '';
-        }
+        const messages = {
+            activate: 'Deseja ativar esta conta?',
+            deactivate: 'Deseja desativar esta conta?',
+            suspend: 'Deseja suspender esta conta?',
+            requestRemoval: 'Deseja marcar esta conta para remoção?',
+        };
+        return messages[action] || '';
     };
 
-    const renderActionButton = (label, action , disabled = false) => (
+    const renderButton = (label, action, disabled = false) => (
         <TouchableOpacity
-            style={[styles.actionButton, disabled && styles.disabledButton]}
+            style={[styles.button, disabled ? styles.disabledButton : styles.activeButton]}
             onPress={() => handleAction(action)}
             disabled={processing || disabled}
         >
-            <Text style={styles.actionText}>{label}</Text>
+            <Text style={styles.buttonText}>{label}</Text>
         </TouchableOpacity>
     );
 
@@ -134,18 +129,16 @@ export default function AdminAccountManagement({ route, navigation }) {
     if (loading) {
         return (
             <View style={styles.centered}>
-                <ActivityIndicator size="large" color="#3b82f6" />
+                <ActivityIndicator size="large" color={theme.primary} />
             </View>
         );
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <View style={styles.card}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+            <ScrollView contentContainerStyle={styles.container}>
                 <Text style={styles.title}>Gestão de Conta</Text>
-                <Text style={styles.subtitle}>
-                    Estado atual: <Text style={styles.status}>{getStatusLabel(status)}</Text>
-                </Text>
+                <Text style={styles.subtitle}>Estado atual: <Text style={styles.status}>{getStatusLabel(status)}</Text></Text>
 
                 {status === 'A_REMOVER' && (
                     <Text style={styles.alert}>
@@ -153,83 +146,92 @@ export default function AdminAccountManagement({ route, navigation }) {
                     </Text>
                 )}
 
-                <View style={styles.actionsContainer}>
-                    {status !== 'ATIVADA' && renderActionButton('Ativar Conta', 'activate')}
-                    {status !== 'DESATIVADA' && status !== 'A_REMOVER' && renderActionButton('Desativar Conta', 'deactivate')}
-                    {status !== 'SUSPENSA' && status !== 'A_REMOVER' && renderActionButton('Suspender Conta', 'suspend')}
-                    {status !== 'A_REMOVER' && renderActionButton('Pedir Remoção', 'requestRemoval')}
+                <View style={styles.card}>
+                    {status !== 'ATIVADA' && renderButton('Ativar Conta', 'activate')}
+                    {status !== 'DESATIVADA' && status !== 'A_REMOVER' && renderButton('Desativar Conta', 'deactivate')}
+                    {status !== 'SUSPENSA' && status !== 'A_REMOVER' && renderButton('Suspender Conta', 'suspend')}
+                    {status !== 'A_REMOVER' && renderButton('Pedir Remoção', 'requestRemoval')}
                 </View>
 
-                <TouchableOpacity onPress={() => navigation.navigate('AdminDashboard')} style={styles.backButton}>
-                    <Text style={styles.backText}>Voltar à lista de utilizadores</Text>
+                <TouchableOpacity
+                    style={styles.backButton}
+                    onPress={() => navigation.navigate('AdminDashboard')}
+                >
+                    <Text style={styles.backText}>Voltar ao Dashboard</Text>
                 </TouchableOpacity>
-            </View>
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
 const getStyles = (theme) => StyleSheet.create({
     container: {
-        padding: 16,
-        backgroundColor: theme.background || '#fff',
-    },
-    card: {
-        padding: 16,
-        borderRadius: 12,
-        backgroundColor: theme.card || '#f8fafc',
-        shadowColor: '#000',
-        shadowOpacity: 0.1,
-        shadowOffset: { width: 0, height: 2 },
-        shadowRadius: 4,
-        elevation: 3,
+        padding: spacing.lg,
     },
     title: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 8,
-        color: theme.text || '#000',
+        fontSize: 24,
+        fontWeight: '700',
+        color: theme.primary,
+        textAlign: 'center',
+        marginBottom: spacing.sm,
+        borderBottomWidth: 2,
+        borderBottomColor: theme.primary,
+        paddingBottom: spacing.sm,
     },
     subtitle: {
         fontSize: 16,
-        marginBottom: 16,
-        color: theme.text || '#000',
+        color: theme.text,
+        textAlign: 'center',
+        marginBottom: spacing.md,
     },
     status: {
         fontWeight: 'bold',
-        color: '#0ea5e9',
+        color: theme.secondary,
     },
     alert: {
         color: '#f97316',
-        marginBottom: 16,
         fontStyle: 'italic',
-    },
-    actionsContainer: {
-        marginBottom: 24,
-    },
-    actionButton: {
-        backgroundColor: '#3b82f6',
-        padding: 12,
-        borderRadius: 8,
-        marginBottom: 12,
-    },
-    actionText: {
-        color: '#fff',
-        fontWeight: '600',
         textAlign: 'center',
+        marginBottom: spacing.md,
+    },
+    card: {
+        backgroundColor: theme.surface,
+        borderRadius: 12,
+        padding: spacing.md,
+        marginBottom: spacing.lg,
+        shadowColor: theme.cardShadow || '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 2,
+    },
+    button: {
+        paddingVertical: spacing.md,
+        borderRadius: 10,
+        marginBottom: spacing.sm,
+        alignItems: 'center',
+    },
+    activeButton: {
+        backgroundColor: theme.primary,
     },
     disabledButton: {
         backgroundColor: '#94a3b8',
     },
+    buttonText: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 16,
+    },
     backButton: {
-        padding: 12,
-        borderRadius: 8,
+        padding: spacing.md,
+        borderRadius: 10,
         borderWidth: 1,
-        borderColor: '#3b82f6',
+        borderColor: theme.primary,
+        alignItems: 'center',
     },
     backText: {
-        color: '#3b82f6',
-        textAlign: 'center',
-        fontWeight: '500',
+        color: theme.primary,
+        fontWeight: '600',
     },
     centered: {
         flex: 1,
@@ -237,4 +239,3 @@ const getStyles = (theme) => StyleSheet.create({
         alignItems: 'center',
     },
 });
-

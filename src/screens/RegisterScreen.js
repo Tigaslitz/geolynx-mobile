@@ -22,7 +22,7 @@ export default function Register({navigation}) {
         username: '',
         email: '',
         fullName: '',
-        phone: '',
+        phonePrimary: '',
         password: '',
         confirmPassword: '',
     });
@@ -51,11 +51,10 @@ export default function Register({navigation}) {
                 username: formData.username,
                 email: formData.email,
                 fullName: formData.fullName,
-                phone: formData.phone,
+                phonePrimary: formData.phone,
                 password: formData.password,
                 confirmPassword: formData.confirmPassword,
-                role: 'VU',
-                profile: 'PRIVADO',
+                role: 'RU',
             });
 
             if (result.success) {

@@ -1,4 +1,5 @@
-import React, {useState, useEffect, useCallback} from 'react';
+// Mesma lógica de negócio, só o estilo e layout foram modernizados
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     View,
     Text,
@@ -7,16 +8,19 @@ import {
     ActivityIndicator,
     Alert,
     TouchableOpacity,
-    FlatList, BackHandler,
+    FlatList,
+    BackHandler,
 } from 'react-native';
-import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useUser } from '../contexts/UserContext';
 import { getTheme } from '../services/GeneralFunctions';
 import { darkmode, lightmode } from '../theme/colors';
+import { spacing } from '../theme';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function AccountRemovalRequestsScreen() {
     const navigation = useNavigation();
-    const {getAccountsForRemoval, removeUser, activateAccount,} = useUser();
+    const { getAccountsForRemoval, removeUser, activateAccount } = useUser();
 
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -37,7 +41,7 @@ export default function AccountRemovalRequestsScreen() {
         useCallback(() => {
             const onBackPress = () => {
                 navigation.navigate('AdminDashboard');
-                return true; // bloqueia o comportamento padrão
+                return true;
             };
             const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress);
             return () => subscription.remove();
@@ -47,8 +51,8 @@ export default function AccountRemovalRequestsScreen() {
     const fetchRequests = async () => {
         setLoading(true);
         try {
-            const requests = await getAccountsForRemoval();
-            setRequests(requests);
+            const data = await getAccountsForRemoval();
+            setRequests(data);
         } catch (err) {
             Alert.alert('Erro', 'Falha ao buscar pedidos de remoção.');
         } finally {
@@ -57,37 +61,24 @@ export default function AccountRemovalRequestsScreen() {
     };
 
     const handleAction = (action, user) => {
-        const data = user.email || user.username ;
-        const message =
-            action === 'remove'
-                ? `Tem a certeza que deseja remover permanentemente ${data.identificador}? Esta ação é irreversível.`
-                : `Deseja cancelar o pedido de remoção de ${data.identificador} e reativar a conta?`;
+        const identifier = user.email || user.username;
+        const message = action === 'remove'
+            ? `Tem a certeza que deseja remover permanentemente ${identifier}? Esta ação é irreversível.`
+            : `Deseja cancelar o pedido de remoção de ${identifier} e reativar a conta?`;
 
-        Alert.alert(
-            'Confirmar Ação',
-            message,
-            [
-                { text: 'Cancelar', style: 'cancel' },
-                {
-                    text: 'Confirmar',
-                    onPress: () => executeAction(action, data),
-                },
-            ]
-        );
+        Alert.alert('Confirmar Ação', message, [
+            { text: 'Cancelar', style: 'cancel' },
+            { text: 'Confirmar', onPress: () => executeAction(action, identifier) },
+        ]);
     };
 
-    const executeAction = async (action, data) => {
+    const executeAction = async (action, identifier) => {
         setProcessing(true);
         try {
-            if (action === 'remove') {
-                console.log("zimba", data);
-                await removeUser(data);
-            } else if (action === 'cancel') {
-                console.log("zimba2", data);
-                await activateAccount(data);
-            }
+            if (action === 'remove') await removeUser(identifier);
+            if (action === 'cancel') await activateAccount(identifier);
             fetchRequests();
-        } catch (err) {
+        } catch {
             Alert.alert('Erro', 'Ação falhou.');
         } finally {
             setProcessing(false);
@@ -103,14 +94,14 @@ export default function AccountRemovalRequestsScreen() {
             <Text style={styles.status}>PENDING REMOVAL</Text>
             <View style={styles.buttonsRow}>
                 <TouchableOpacity
-                    style={[styles.button, styles.removeButton]}
+                    style={[styles.actionButton, styles.removeButton]}
                     onPress={() => handleAction('remove', item)}
                     disabled={processing}
                 >
                     <Text style={styles.buttonText}>Remover</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    style={[styles.button, styles.cancelButton]}
+                    style={[styles.actionButton, styles.cancelButton]}
                     onPress={() => handleAction('cancel', item)}
                     disabled={processing}
                 >
@@ -121,80 +112,94 @@ export default function AccountRemovalRequestsScreen() {
     );
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.header}>Pedidos de Remoção de Conta</Text>
-            <Text style={styles.subtext}>Reveja os pedidos antes de tomar ações</Text>
+        <SafeAreaView style={{ flex: 1, backgroundColor: theme.background }}>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Text style={styles.title}>Pedidos de Remoção</Text>
+                <Text style={styles.subtitle}>Reveja os pedidos antes de tomar ações</Text>
 
-            {loading ? (
-                <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 20 }} />
-            ) : requests.length === 0 ? (
-                <Text style={styles.noRequests}>Nenhum pedido de remoção pendente.</Text>
-            ) : (
-                <FlatList
-                    data={requests}
-                    keyExtractor={(item) => item.username}
-                    renderItem={renderItem}
-                    scrollEnabled={false}
-                />
-            )}
+                {loading ? (
+                    <ActivityIndicator size="large" color={theme.primary} style={{ marginTop: 20 }} />
+                ) : requests.length === 0 ? (
+                    <Text style={styles.noRequests}>Nenhum pedido de remoção pendente.</Text>
+                ) : (
+                    <FlatList
+                        data={requests}
+                        keyExtractor={(item) => item.username}
+                        renderItem={renderItem}
+                        scrollEnabled={false}
+                    />
+                )}
 
-            <TouchableOpacity onPress={() => navigation.navigate('AdminDashboard')} style={styles.backButton}>
-                <Text style={styles.backText}>Voltar à lista de utilizadores</Text>
-            </TouchableOpacity>
-        </ScrollView>
+                <TouchableOpacity onPress={() => navigation.navigate('AdminDashboard')} style={styles.backButton}>
+                    <Text style={styles.backText}>Voltar ao Dashboard</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        </SafeAreaView>
     );
 }
 
 const getStyles = (theme) => StyleSheet.create({
     container: {
-        padding: 16,
-        backgroundColor: theme.background,
+        padding: spacing.lg,
     },
-    header: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        marginBottom: 8,
+    title: {
+        fontSize: 24,
+        fontWeight: '700',
+        color: theme.primary,
+        textAlign: 'center',
+        marginBottom: spacing.sm,
+        borderBottomWidth: 2,
+        borderBottomColor: theme.primary,
+        paddingBottom: spacing.sm,
     },
-    subtext: {
+    subtitle: {
         fontSize: 14,
-        color: '#64748b',
-        marginBottom: 16,
+        color: theme.text,
+        textAlign: 'center',
+        marginBottom: spacing.lg,
     },
     noRequests: {
+        textAlign: 'center',
+        color: theme.text,
+        marginTop: spacing.lg,
         fontStyle: 'italic',
-        color: '#475569',
-        marginTop: 20,
     },
     card: {
-        backgroundColor: '#f1f5f9',
+        backgroundColor: theme.surface,
         borderRadius: 12,
-        padding: 16,
-        marginBottom: 16,
+        padding: spacing.md,
+        marginBottom: spacing.md,
+        shadowColor: theme.cardShadow || '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
     },
     name: {
         fontWeight: 'bold',
         fontSize: 16,
+        color: theme.text,
     },
     info: {
-        color: '#334155',
         fontSize: 14,
-        marginTop: 4,
+        color: theme.textSecondary || '#555',
+        marginTop: 2,
     },
     status: {
         color: '#dc2626',
-        marginTop: 8,
         fontWeight: 'bold',
+        marginTop: spacing.sm,
     },
     buttonsRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginTop: 12,
+        marginTop: spacing.md,
+        gap: 10,
     },
-    button: {
+    actionButton: {
         flex: 1,
-        padding: 10,
-        marginHorizontal: 4,
-        borderRadius: 8,
+        padding: spacing.sm,
+        borderRadius: 10,
         alignItems: 'center',
     },
     removeButton: {
@@ -208,15 +213,15 @@ const getStyles = (theme) => StyleSheet.create({
         fontWeight: '600',
     },
     backButton: {
-        marginTop: 24,
-        padding: 12,
+        marginTop: spacing.xl,
+        padding: spacing.md,
         borderWidth: 1,
-        borderColor: '#3b82f6',
-        borderRadius: 8,
+        borderColor: theme.primary,
+        borderRadius: 10,
         alignItems: 'center',
     },
     backText: {
-        color: '#3b82f6',
-        fontWeight: '500',
+        color: theme.primary,
+        fontWeight: '600',
     },
 });
