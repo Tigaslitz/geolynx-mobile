@@ -219,7 +219,9 @@ export default function AdminDashboard({ navigation }) {
                   <Text style={styles.th}>Role</Text>
                   <Text style={styles.th}>Ações</Text>
                 </View>
-                {(removalRequests.slice(0, 3)).map((r) => (
+
+                {/* Display the first 3 removal requests */}
+                {(showAllRemovals ? removalRequests : removalRequests.slice(0, 3)).map((r) => (
                     <View key={r.id} style={styles.tableRow}>
                       <Text style={styles.td}>{r.personalInfo?.fullName || r.username}</Text>
                       <Text style={styles.td}>{r.email}</Text>
@@ -229,7 +231,9 @@ export default function AdminDashboard({ navigation }) {
                       </TouchableOpacity>
                     </View>
                 ))}
-                {(removalRequests.length > 3) && (
+
+                {/* Check if the removal requests are more than 3, show toggle button */}
+                {removalRequests.length > 3 && (
                     <TouchableOpacity onPress={() => setShowAllRemovals(!showAllRemovals)}>
                       <Text style={styles.toggleBtn}>
                         {showAllRemovals ? 'Fechar ▲' : 'Ver Todos ▼'}
