@@ -141,7 +141,11 @@ export default function AdminDashboard({ navigation }) {
 
   return (
       <SafeAreaView style={{ flex: 1, backgroundColor: theme.background, paddingTop:10, paddingBottom:10 }}>
-        <ScrollView ref={scrollRef} style={styles.container}>
+        <ScrollView
+            ref={scrollRef}
+            style={styles.container}
+            contentContainerStyle={{ paddingBottom: 40 }}
+        >
           <Text style={styles.title}>Dashboard Administrativo</Text>
 
           <View style={styles.cardsRow}>
@@ -248,7 +252,7 @@ export default function AdminDashboard({ navigation }) {
 }
 
 const getStyles = (theme) => StyleSheet.create({
-  container: { flex: 1, padding: spacing.lg, backgroundColor: theme.background },
+  container: { flex: 1, padding: spacing.lg, backgroundColor: theme.background,  },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   title: { fontSize: 24, fontWeight: '700', marginBottom: spacing.md, textAlign: 'center', color:theme.primary },
   cardsRow: { flexWrap: 'wrap', flexDirection: 'row', justifyContent: 'space-between' },
