@@ -3,6 +3,7 @@ import {ActivityIndicator, View,StyleSheet} from "react-native";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {AuthProvider, useAuth} from './src/contexts/AuthContext';
 import {UserProvider} from "./src/contexts/UserContext";
+import {MapProvider} from "./src/contexts/MapContext";
 import { WorkSheetProvider } from './src/contexts/WorkSheetContext';
 import {ExecutionSheetProvider} from "./src/contexts/ExecutionSheetContext";
 import { NavigationContainer } from '@react-navigation/native';
@@ -49,7 +50,9 @@ export default function App() {
                     <WorkSheetProvider>
                         <ExecutionSheetProvider>
                             <NavigationContainer>
-                                <AppNavigator />
+                                <MapProvider>
+                                    <AppNavigator/>
+                                </MapProvider>
                             </NavigationContainer>
                         </ExecutionSheetProvider>
                     </WorkSheetProvider>
