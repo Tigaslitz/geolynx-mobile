@@ -44,23 +44,31 @@ export default function UserManualScreen() {
                 />
                 <Section
                     title="2. Navegação Principal"
-                    content="A página inicial mostra estatísticas e atalhos rápidos para ações como criar fichas de obra ou consultar utilizadores."
+                    content="A página inicial mostra o mapa, estatísticas e atalhos rápidos para ações como criar fichas de obra ou consultar utilizadores."
                 />
                 <Section
-                    title="3. Criar Ficha de Obra"
+                    title="3. Mapa"
+                    content="O mapa pode ser visualizado em visor minimizado, ou pode ser expandido para revelar a totalidade das funcionalidades que o mapa oferece, como a visualização de entidades (animais e curiosidades históricas) e criação de entidades."
+                />
+                <Section
+                    title="4. Criar Ficha de Obra"
                     content="Aceda ao menu 'Nova Ficha de Obra', preencha os campos obrigatórios e guarde os dados."
                 />
                 <Section
-                    title="4. Gerir Utilizadores"
-                    content="Apenas utilizadores com permissões (SYSADMIN) podem visualizar e gerir contas de outros utilizadores."
+                    title="5. Gerir Utilizadores"
+                    content="Apenas utilizadores com permissões devidas podem visualizar e gerir contas de outros utilizadores."
                 />
                 <Section
-                    title="5. Temas"
-                    content="Pode alternar entre o modo claro e escuro na página de definições."
+                    title="6. Página de Perfil"
+                    content="Pode alternar entre o modo claro e escuro, pode encontrar este manual, terminar sessão, e apagar a sua conta."
                 />
                 <Section
-                    title="6. Terminar Sessão"
-                    content="Utilize o botão 'Terminar Sessão' na página de definições para sair da aplicação com segurança."
+                    title="7. Terminar Sessão"
+                    content="Utilize o botão 'Terminar Sessão' para sair da aplicação com segurança."
+                />
+                <Section
+                    title="8. Eliminar Conta"
+                    content="Utilize o botão 'Eliminar Conta' para apagar a sua conta (Atenção: esta ação é irreversível)."
                 />
 
                 <Text style={styles.footer}>
