@@ -20,7 +20,7 @@ export const UserProvider = ({ children }) => {
             setUser(response.data);
             return response.data;
         } catch (error) {
-            console.error('Utilizador não encontrado:', error);
+            throw error;
         } finally {
             setLoading(false);
         }

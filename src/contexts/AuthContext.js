@@ -20,14 +20,24 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const loadUser = async () => {
-            const check = await getUser();
-            if (check) {
-                setIsAuthenticated(true);
+            try {
+                const check = await getUser();
+                if (check) {
+                    setIsAuthenticated(true);
+                } else {
+                    setIsAuthenticated(false); // caso inesperado
+                }
+            } catch (error) {
+                setIsAuthenticated(false); // se getUser lançar erro
+            } finally {
+                setLoading(false); // só aqui deves fazer o setLoading
             }
-            setLoading(false);
         };
+
         loadUser();
     }, []);
+
+
 
     const login = async (email, password) => {
         try {
