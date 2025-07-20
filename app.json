@@ -13,20 +13,28 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.geolynx",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/Logo_Geolynx.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.geolynx"
     },
     "web": {
       "favicon": "./assets/Logo_Geolynx.png"
     },
     "extra": {
-      "apiUrl": "https://glass-gasket-463218-j2.ew.r.appspot.com/api"
+      "apiUrl": "https://glass-gasket-463218-j2.ew.r.appspot.com/api",
+      "eas": {
+        "projectId": "89668637-6086-43d0-ae37-28a8af96a004"
+      }
     },
     "plugins": [
       "expo-secure-store"
