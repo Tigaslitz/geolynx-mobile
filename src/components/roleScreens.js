@@ -32,7 +32,7 @@ const roleScreens = {
         'Operations', 'ExecutionSheets', 'ExecutionSheetDetail', 'SettingsScreen', 'UserManualScreen'
     ],
     PO: [
-        'Home', 'Profile', 'AccountManagement','AccountManagement', 'RequestAccountRemoval', 'Operations',
+        'Home', 'Profile','AccountManagement', 'RequestAccountRemoval', 'Operations',
         'ExecutionSheets', 'ExecutionSheetDetail', 'ExecutionOperation', 'PolygonOperation',
         'SettingsScreen', 'UserManualScreen'
     ],
